@@ -11,6 +11,7 @@ final class GenresViewModel {
     
     private var genres: [Genre] = []
     var onUpdate: (() -> Void)?
+    
     private let webService = WebService.shared
         
     func fetchGenres() {

@@ -47,6 +47,7 @@ final class DiscoverViewController: UIViewController {
         viewModel.fetchGenres()
     }
 }
+
 extension DiscoverViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         viewModel.numberOfGenres()

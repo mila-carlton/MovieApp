@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class MoviesTableViewCell: UITableViewCell {
+final class MoviesTableViewCell: UITableViewCell, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout  {
     
     static let id = "\(MoviesTableViewCell.self)"
     
@@ -16,7 +16,7 @@ final class MoviesTableViewCell: UITableViewCell {
     lazy var seeButton: UIButton = {
         let button = UIButton()
         button.setTitle("See all", for: .normal)
-        button.tintColor = .red
+        button.setTitleColor(.red, for: .normal)
         button.backgroundColor = .clear
         button.titleLabel?.font = .systemFont(ofSize: 15, weight: .medium)
         addSubview(button)
@@ -51,18 +51,27 @@ final class MoviesTableViewCell: UITableViewCell {
         titleLabel.text = movie.title
         movieArray = movie.movieList
         
+        seeButton.addTarget(self, action: #selector(seeAllButtonTapped), for: .touchUpInside)
+        
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             movieCollectionView.reloadData()
         }
     }
+    @objc func seeAllButtonTapped() {
+//        if let rootViewController = self.window?.rootViewController {
+//            
+//            let navigationController = UINavigationController(rootViewController: MovieListViewController)
+//            
+//            rootViewController.present(navigationController, animated: true, completion: nil)
+            print("See all buton pressed")
+        }
     
     private func  setupAutoLayouts() {
         addSubview(titleLabel)
         [titleLabel, seeButton, movieCollectionView].forEach { view in
             view.translatesAutoresizingMaskIntoConstraints = false
         }
-        
         
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 8),
@@ -77,32 +86,39 @@ final class MoviesTableViewCell: UITableViewCell {
             movieCollectionView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
             movieCollectionView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
             movieCollectionView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8)
-        
+            
         ])
+    
     }
     
 }
-extension MoviesTableViewCell: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+extension MoviesTableViewCell {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        movieArray.count
+       movieArray.count
+        
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MovieCollectionViewCell.id, for: indexPath) as! MovieCollectionViewCell
         cell.configure(movieItem: movieArray[indexPath.item])
         cell.backgroundColor = .cellColor
-        cell.layer.cornerRadius = 10
+        cell.layer.cornerRadius = 15
         return cell
         
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = ((UIScreen.main.bounds.size.width/3) - 18)
+        let width = ((UIScreen.main.bounds.size.width/2.5) - 18)
         let height: CGFloat = 230
+        
         return CGSize(width: width, height: height)
     }
     
-    
+    override func setSelected(_ selected: Bool, animated: Bool) {
+        super.setSelected(selected, animated: animated)
+        selectionStyle = .none
+    }
+
 }
 

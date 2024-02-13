@@ -30,10 +30,26 @@ final class HomeViewModel {
     func fetchTrendMovie(completion: @escaping(()->Void)) {
         webService.fetchMovieList(url: .trending) { [weak self] trendingMovie in
             guard let self = self else { return }
-            self.homeMoview.append(HomeMovies(title: "Trending", movieList: trendingMovie?.results ?? []))
+            self.homeMoview.append(HomeMovies(title: "Trending", movieList: trendingMovie?.results ?? [] ))
             completion()
         }
     }
+    
+    func fetchNowPlayingMovie(completion: @escaping(()->Void)) {
+        webService.fetchMovieList(url: .nowPlaying) { [weak self] nowPlaying in
+            guard let self = self else { return }
+            self.homeMoview.append(HomeMovies(title: "Now playing", movieList: nowPlaying?.results ?? [] ))
+            completion()
+        }
+    }
+    
+    func fetchTopRatedMovie(completion: @escaping(()->Void)) {
+        webService.fetchMovieList(url: .topRated) { [weak self] topRated in
+            self?.homeMoview.append(HomeMovies(title: "Top rated", movieList: topRated?.results ?? [] ))
+            completion()
+        }
+    }
+    
     func numberOfRowsInSection() -> Int {
         homeMoview.count
     }

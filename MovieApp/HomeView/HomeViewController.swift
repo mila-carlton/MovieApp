@@ -9,12 +9,11 @@ import UIKit
 
 final class HomeViewController: UIViewController {
     
-
+    
     lazy var movieTableView: UITableView = {
-        let tableView = UITableView(frame: .zero)
+        let tableView = UITableView(frame: .zero, style: .grouped)
         tableView.rowHeight = 280
         tableView.register(MoviesTableViewCell.self, forCellReuseIdentifier: MoviesTableViewCell.id)
-        
         
         tableView.delegate = self
         tableView.dataSource = self
@@ -27,7 +26,7 @@ final class HomeViewController: UIViewController {
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 8),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -8)
         ])
-
+        
         return tableView
     }()
     
@@ -38,46 +37,26 @@ final class HomeViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        
-        //fetchPopularMovies()
-        
         fetchMovies()
         
     }
-    
-//    func fetchPopularMovies() {
-//        viewModel.homeMoview.removeAll(keepingCapacity: false)
-//        viewModel.fetchPopularMovies { [weak self] in
-//            guard let self = self else { return }
-//            DispatchQueue.main.async {
-//                self.movieTableView.reloadData()
-//            }
-//        }
-//    }
-//    
-//    func fetchTrendMovie() {
-//        viewModel.fetchTrendMovie {
-//            <#code#>
-//        }
-//    }
-    
-    
     
     func fetchMovies() {
         
         self.viewModel.fetchTrendMovie {
             self.viewModel.fetchPopularMovies {
-                DispatchQueue.main.async {
-                    self.movieTableView.reloadData()
+                self.viewModel.fetchNowPlayingMovie {
+                    self.viewModel.fetchTopRatedMovie {
+                        DispatchQueue.main.async {
+                            self.movieTableView.reloadData()
+                        }
+                    }
                 }
             }
         }
-        
-       
     }
-   
 }
+
 extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -87,7 +66,6 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: MoviesTableViewCell.id , for: indexPath) as! MoviesTableViewCell
         cell.configure(movie: viewModel.cellForRowAt(index: indexPath.row))
-        cell.backgroundColor = .green
         return cell
     }
     

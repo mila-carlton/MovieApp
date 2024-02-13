@@ -47,4 +47,16 @@ final class WebService {
         }
         
     }
+    
+    func fetchUpComing(completion: @escaping (([SoonMovie]?) -> Void) ) {
+        let url = URL(string: URLEndpoints.upComing.rawValue)!
+        NetworkRequest.shared.requestAPI(type: SoonMovieResponse.self, url: url.absoluteString) { result in
+            switch result {
+            case .success(let soonMovie):
+                completion(soonMovie.results ?? [])
+            case .failure(let failure):
+                completion(nil)
+            }
+        }
+    }
 }

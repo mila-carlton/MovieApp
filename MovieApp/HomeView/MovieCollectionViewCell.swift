@@ -24,12 +24,16 @@ final class MovieCollectionViewCell: UICollectionViewCell {
     func configure(movieItem: MovieListResult) {
         
         movieImage.loadImage(imageURL: movieItem.posterPath ?? "")
+        
+        
     }
     
     
     private func setupImage() {
+        movieImage.contentMode = .scaleToFill
         addSubview(movieImage)
         movieImage.translatesAutoresizingMaskIntoConstraints = false
+        
         NSLayoutConstraint.activate([
             movieImage.topAnchor.constraint(equalTo: topAnchor),
             movieImage.leadingAnchor.constraint(equalTo: leadingAnchor),
