@@ -19,6 +19,7 @@ final class WebService {
         case topRated = "https://api.themoviedb.org/3/movie/top_rated"
         case trending = "https://api.themoviedb.org/3/trending/movie/week"
         case upComing = "https://api.themoviedb.org/3/movie/upcoming"
+        case details = "https://api.themoviedb.org/3/movie/"
     }
     
     func fetchGenres(completion: @escaping (([Genre]?) -> Void) ) {
@@ -54,9 +55,23 @@ final class WebService {
             switch result {
             case .success(let soonMovie):
                 completion(soonMovie.results ?? [])
-            case .failure(let failure):
+            case .failure(_):
                 completion(nil)
             }
         }
+    }
+    
+    func fetchDetails(movieId: Int, completion: @escaping ((MovieDetailsModel?)-> Void)) {
+        let url = URL(string: URLEndpoints.details.rawValue + String(movieId))!
+        NetworkRequest.shared.requestAPI(type: MovieDetailsModel.self, url: url.absoluteString) { result in
+            switch result {
+            case .success(let details):
+                completion(details)
+            case .failure(_):
+                completion(nil)
+            }
+        }
+        
+        
     }
 }

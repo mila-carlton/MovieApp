@@ -22,11 +22,8 @@ final class MovieCollectionViewCell: UICollectionViewCell {
     }
     
     func configure(movieItem: MovieListResult) {
-        
         movieImage.loadImage(imageURL: movieItem.posterPath ?? "")
-        
-        
-    }
+     }
     
     
     private func setupImage() {
