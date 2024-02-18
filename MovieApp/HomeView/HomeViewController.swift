@@ -66,10 +66,8 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: MoviesTableViewCell.id , for: indexPath) as! MoviesTableViewCell
-        
         cell.selectedMovieDelegate = self
-        
-        
+    
         cell.configure(movie: viewModel.cellForRowAt(index: indexPath.row))
         cell.seeAllMovieesDelegate = self
         return cell

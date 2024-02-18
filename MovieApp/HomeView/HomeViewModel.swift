@@ -17,12 +17,12 @@ final class HomeViewModel {
     private var movies: [MovieListResult] = []
     let webService = WebService.shared
     
-    var homeMoview: [HomeMovies] = []
+    var homeMovies: [HomeMovies] = []
     
     func fetchPopularMovies(complete: @escaping (()->Void)) {
         webService.fetchMovieList(url: .popular) { [weak self] popularMovieListResponse in
             guard let self = self else { return }
-            self.homeMoview.append(HomeMovies(title: "Popular", movieList: popularMovieListResponse?.results ?? []))
+            self.homeMovies.append(HomeMovies(title: "Popular", movieList: popularMovieListResponse?.results ?? []))
             complete()
         }
     }
@@ -30,7 +30,7 @@ final class HomeViewModel {
     func fetchTrendMovie(completion: @escaping(()->Void)) {
         webService.fetchMovieList(url: .trending) { [weak self] trendingMovie in
             guard let self = self else { return }
-            self.homeMoview.append(HomeMovies(title: "Trending", movieList: trendingMovie?.results ?? [] ))
+            self.homeMovies.append(HomeMovies(title: "Trending", movieList: trendingMovie?.results ?? [] ))
             completion()
         }
     }
@@ -38,24 +38,24 @@ final class HomeViewModel {
     func fetchNowPlayingMovie(completion: @escaping(()->Void)) {
         webService.fetchMovieList(url: .nowPlaying) { [weak self] nowPlaying in
             guard let self = self else { return }
-            self.homeMoview.append(HomeMovies(title: "Now playing", movieList: nowPlaying?.results ?? [] ))
+            self.homeMovies.append(HomeMovies(title: "Now playing", movieList: nowPlaying?.results ?? [] ))
             completion()
         }
     }
     
     func fetchTopRatedMovie(completion: @escaping(()->Void)) {
         webService.fetchMovieList(url: .topRated) { [weak self] topRated in
-            self?.homeMoview.append(HomeMovies(title: "Top rated", movieList: topRated?.results ?? [] ))
+            self?.homeMovies.append(HomeMovies(title: "Top rated", movieList: topRated?.results ?? [] ))
             completion()
         }
     }
     
     func numberOfRowsInSection() -> Int {
-        homeMoview.count
+        homeMovies.count
     }
     
     func cellForRowAt(index: Int) -> HomeMovies {
-        return homeMoview[index]
+        return homeMovies[index]
     }
 }
 

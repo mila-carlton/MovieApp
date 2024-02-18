@@ -35,7 +35,8 @@ final class DiscoverViewController: UIViewController {
         ])
         return collectionView
     }()
-
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .customBackgroundColor
@@ -46,6 +47,8 @@ final class DiscoverViewController: UIViewController {
         }
         viewModel.fetchGenres()
     }
+    
+
 }
 
 extension DiscoverViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
@@ -64,6 +67,20 @@ extension DiscoverViewController: UICollectionViewDelegate, UICollectionViewData
         cell.layer.cornerRadius = 10
         cell.backgroundColor = .cellColor
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let selectedGenre = viewModel.genre(at: indexPath.item)
+        
+        showMoviesForGenre(with: selectedGenre)
+    }
+    
+    func showMoviesForGenre(with genre: Genre) {
+        let moviesforGenreViewController = MovieForGenreViewController()
+        
+        moviesforGenreViewController.genreId = genre.id
+        
+        navigationController?.pushViewController(moviesforGenreViewController, animated: true)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {

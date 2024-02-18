@@ -61,14 +61,11 @@ extension SeeAllViewController: UICollectionViewDelegate, UICollectionViewDataSo
     }
     
     
-    
 }
 extension SeeAllViewController {
     
-
     func setupLayouts() {
-        
-        
+                
         NSLayoutConstraint.activate([
             allCollectionView.topAnchor.constraint(equalTo: view.topAnchor),
             allCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),

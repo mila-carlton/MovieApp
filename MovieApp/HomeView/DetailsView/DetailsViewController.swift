@@ -13,7 +13,7 @@ final class DetailsViewController: UIViewController {
     lazy var movieDetailsView: MovieDetailView = {
         let detailsView = MovieDetailView()
         detailsView.translatesAutoresizingMaskIntoConstraints = false
-        detailsView.backgroundColor = .red
+        detailsView.backgroundColor = .systemBackground
         view.addSubview(detailsView)
         return detailsView
     }()
@@ -30,7 +30,6 @@ final class DetailsViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-
     override func viewDidLoad() {
         super.viewDidLoad()
         autoLayout()
@@ -50,7 +49,7 @@ final class DetailsViewController: UIViewController {
         NSLayoutConstraint.activate([
             movieDetailsView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 4),
             movieDetailsView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -4),
-            movieDetailsView.topAnchor.constraint(equalTo: view.topAnchor),
+            movieDetailsView.topAnchor.constraint(equalTo: view.topAnchor, constant: 200),
             movieDetailsView.heightAnchor.constraint(equalToConstant: 300)
         
         

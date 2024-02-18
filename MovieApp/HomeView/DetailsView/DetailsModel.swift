@@ -49,7 +49,7 @@ struct MovieDetailsModel: Decodable {
 
 // MARK: - SpokenLanguage
 struct SpokenLanguage: Codable {
-    let englishName, name: String?
+    var englishName, name: String?
 
     enum CodingKeys: String, CodingKey {
         case englishName = "english_name"

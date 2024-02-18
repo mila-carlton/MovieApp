@@ -9,8 +9,6 @@ import UIKit
 
 final class MovieDetailView: UIView {
     
-    
-    
     private lazy var namelabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 0
@@ -98,7 +96,7 @@ final class MovieDetailView: UIView {
     private lazy var overviewStaticLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 0
-        label.font = .systemFont(ofSize: 15, weight: .medium)
+        label.font = .systemFont(ofSize: 14, weight: .medium)
         label.text = "Overview"
         label.textColor = .lightGray
         addSubview(label)
@@ -116,7 +114,7 @@ final class MovieDetailView: UIView {
     private lazy var overviewLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 0
-        label.font = .systemFont(ofSize: 11, weight: .semibold)
+        label.font = .systemFont(ofSize: 13, weight: .semibold)
         addSubview(label)
         return label
     }()
@@ -150,6 +148,21 @@ final class MovieDetailView: UIView {
     func configure(details: MovieDetailsModel) {
         DispatchQueue.main.async {
             self.namelabel.text = details.title ?? ""
+            self.titleLabel.text = details.tagline ?? ""
+            self.timeLabel.text = String(details.runtime ?? 0) + " minutes"
+            self.dateLabel.text = details.releaseDate ?? ""
+            self.rangeLabel.text = details.voteAverage?.rounding()
+            self.overviewLabel.text = details.overview
+            
+            if let spokenLanguages = details.spokenLanguages {
+                let languagesText = spokenLanguages.compactMap{ $0.name }.joined(separator: ", ")
+                self.languageLabel.text = languagesText
+            }
+            
+            if let genres = details.genres {
+                let genresText = genres.compactMap{ $0.name }.joined(separator: ", ")
+                self.genreLabel.text = genresText
+            }
         }
     }
     
@@ -165,28 +178,28 @@ final class MovieDetailView: UIView {
                 titleLabel.topAnchor.constraint(equalTo: namelabel.bottomAnchor, constant: 4),
                 titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
                 
-                clockImage.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 4),
+                clockImage.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 8),
                 clockImage.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
                 clockImage.widthAnchor.constraint(equalToConstant: 15),
                 clockImage.heightAnchor.constraint(equalToConstant: 15),
                 
-                timeLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 4),
+                timeLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 8),
                 timeLabel.leadingAnchor.constraint(equalTo: clockImage.trailingAnchor, constant: 2),
                 timeLabel.centerYAnchor.constraint(equalTo: clockImage.centerYAnchor),
                 
-                starImage.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 4),
+                starImage.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 8),
                 starImage.leadingAnchor.constraint(equalTo: timeLabel.trailingAnchor, constant: 8),
                 starImage.widthAnchor.constraint(equalToConstant: 15),
                 starImage.heightAnchor.constraint(equalToConstant: 15),
                 
-                rangeLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 4),
+                rangeLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 8),
                 rangeLabel.leadingAnchor.constraint(equalTo: starImage.trailingAnchor, constant: 4),
                 rangeLabel.centerYAnchor.constraint(equalTo: starImage.centerYAnchor),
                 
                 languageLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -4),
-                languageLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 4),
+                languageLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 8),
                 
-                topSeparatorLineView.topAnchor.constraint(equalTo: clockImage.bottomAnchor, constant: 8),
+                topSeparatorLineView.topAnchor.constraint(equalTo: clockImage.bottomAnchor, constant: 12),
                 topSeparatorLineView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 4),
                 topSeparatorLineView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -4),
                 topSeparatorLineView.heightAnchor.constraint(equalToConstant: 2),
@@ -199,13 +212,13 @@ final class MovieDetailView: UIView {
                 dateLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 4),
                 
                 genreStaticLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -4),
-                genreStaticLabel.topAnchor.constraint(equalTo: languageLabel.bottomAnchor, constant: 16),
+                genreStaticLabel.topAnchor.constraint(equalTo: topSeparatorLineView.bottomAnchor, constant: 16),
                 genreStaticLabel.widthAnchor.constraint(equalToConstant: 60),
                 
                 genreLabel.topAnchor.constraint(equalTo: genreStaticLabel.bottomAnchor, constant: 12),
                 genreLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -4),
                 
-                bottomSeparatorLineView.topAnchor.constraint(equalTo: dateLabel.bottomAnchor, constant: 8),
+                bottomSeparatorLineView.topAnchor.constraint(equalTo: dateLabel.bottomAnchor, constant: 12),
                 bottomSeparatorLineView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 4),
                 bottomSeparatorLineView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -4),
                 bottomSeparatorLineView.heightAnchor.constraint(equalToConstant: 2),
@@ -213,12 +226,13 @@ final class MovieDetailView: UIView {
                 
                 overviewStaticLabel.topAnchor.constraint(equalTo: bottomSeparatorLineView.bottomAnchor, constant: 16),
                 overviewStaticLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 4),
-                overviewStaticLabel.widthAnchor.constraint(equalToConstant: 60),
+                overviewStaticLabel.widthAnchor.constraint(equalToConstant: 70),
                 
                 overviewLabel.topAnchor.constraint(equalTo: overviewStaticLabel.bottomAnchor, constant: 12),
                 overviewLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 4),
-                overviewLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -4)
-            
+                overviewLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -4),
+                overviewLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: 4)
+                
             ])
         }
     }
