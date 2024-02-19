@@ -13,17 +13,19 @@ final class WebService {
     private init() { }
     
     enum URLEndpoints: String {
-        case discover = "https://api.themoviedb.org/3/genre/movie/list?language=en"
+        case genres = "https://api.themoviedb.org/3/genre/movie/list?language=en"
         case nowPlaying = "https://api.themoviedb.org/3/movie/now_playing?language=en-US&page=1"
         case popular = "https://api.themoviedb.org/3/movie/popular"
         case topRated = "https://api.themoviedb.org/3/movie/top_rated"
         case trending = "https://api.themoviedb.org/3/trending/movie/week"
         case upComing = "https://api.themoviedb.org/3/movie/upcoming"
         case details = "https://api.themoviedb.org/3/movie/"
+        case discover = "https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc"
+        
     }
     
     func fetchGenres(completion: @escaping (([Genre]?) -> Void) ) {
-        let url = URL(string: URLEndpoints.discover.rawValue)!
+        let url = URL(string: URLEndpoints.genres.rawValue)!
         NetworkRequest.shared.requestAPI(type: Genres.self, url: url.absoluteString) { result in
             switch result {
             case .success(let genres):
@@ -71,7 +73,17 @@ final class WebService {
                 completion(nil)
             }
         }
-        
-        
+    }
+    
+    func fetchDiscover(movieId: Int, completion: @escaping (([DiscoverResult]?) -> Void) )  {
+        let url = URL(string: URLEndpoints.discover.rawValue)!
+        NetworkRequest.shared.requestAPI(type: DiscoverMovies.self, url: url.absoluteString) { result in
+            switch result {
+            case .success(let discover):
+                completion(discover.results)
+            case .failure(_):
+                completion(nil)
+            }
+        }
     }
 }

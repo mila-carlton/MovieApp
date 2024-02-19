@@ -9,12 +9,7 @@ import UIKit
 
 final class MovieForGenreViewController: UIViewController {
     
-    private var homeMovie: [MovieListResult]!
-    private let viewModel = HomeViewModel()
-    
-    var movies: [MovieListResult] = []
-    
-    var genreId: Int?
+    private let viewModel = MovieForGenresViewModel()
       
     lazy var genresCollectionView: UICollectionView = {
         
@@ -39,44 +34,24 @@ final class MovieForGenreViewController: UIViewController {
         super.viewDidLoad()
         setupLayouts()
         
-        if let genreId = genreId {
-            let moviesForGenre = homeMovie.filter { movie in
-                
-                if let genreIDs = movie.genreIDS {
-                    return
-                    genreIDs.contains(genreId)
-                }
-                return false
-            }
-            self.movies = moviesForGenre
+        viewModel.onUpdate = { [weak self] in
+            guard let self = self else { return }
+            self.genresCollectionView.reloadData()
         }
-        fetchMovies()
+        viewModel.fetchDiscover()
     }
     
-    func fetchMovies() {
-        viewModel.fetchNowPlayingMovie {
-            self.viewModel.fetchPopularMovies {
-                self.viewModel.fetchTopRatedMovie {
-                    self.viewModel.fetchTrendMovie {
-                        DispatchQueue.main.async {
-                            self.genresCollectionView.reloadData()
-                        }
-                    }
-                }
-            }
-        }
-    }
 
 }
 extension MovieForGenreViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        movies.count
+        viewModel.movies.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MovieCollectionViewCell.id , for: indexPath) as? MovieCollectionViewCell else { return UICollectionViewCell() }
-        cell.configure(movieItem: movies[indexPath.item])
+        cell.configure(movieItem: viewModel.moviesAll[indexPath.item])
         return cell
     }
     
