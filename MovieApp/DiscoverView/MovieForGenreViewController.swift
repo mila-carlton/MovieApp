@@ -9,7 +9,7 @@ import UIKit
 
 final class MovieForGenreViewController: UIViewController {
     
-    private let viewModel = MovieForGenresViewModel()
+    var viewModelForGenre = MovieForGenresViewModel()
       
     lazy var genresCollectionView: UICollectionView = {
         
@@ -34,11 +34,12 @@ final class MovieForGenreViewController: UIViewController {
         super.viewDidLoad()
         setupLayouts()
         
-        viewModel.onUpdate = { [weak self] in
+        viewModelForGenre.onUpdate = { [weak self] in
             guard let self = self else { return }
             self.genresCollectionView.reloadData()
         }
-        viewModel.fetchDiscover()
+        
+        viewModelForGenre.fetchDiscover()
     }
     
 
@@ -46,12 +47,14 @@ final class MovieForGenreViewController: UIViewController {
 extension MovieForGenreViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        viewModel.movies.count
+        viewModelForGenre.movies.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MovieCollectionViewCell.id , for: indexPath) as? MovieCollectionViewCell else { return UICollectionViewCell() }
-        cell.configure(movieItem: viewModel.moviesAll[indexPath.item])
+        let discoverItem = viewModelForGenre.movies[indexPath.item]
+            cell.configure(movie: discoverItem)
+        
         return cell
     }
     

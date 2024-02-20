@@ -12,7 +12,6 @@ final class MovieForGenresViewModel {
     var movies: [DiscoverResult] = []
     var genreId: Int!
     var onUpdate: (() -> Void)?
-    var moviesAll: [MovieListResult]!
     
     private let webService = WebService.shared
     
@@ -23,10 +22,11 @@ final class MovieForGenresViewModel {
     }
     
     func fetchDiscover() {
+        
         webService.fetchDiscover(movieId: genreId) { [weak self] discover in
             guard let self = self else { return }
             DispatchQueue.main.async {
-                self.movies = discover ?? []
+                self.movies = discover?.filter { $0.genreIDS?.contains(self.genreId) ?? false } ?? []
                 self.onUpdate?()
             }
         }

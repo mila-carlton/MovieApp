@@ -7,8 +7,6 @@
 
 import Foundation
 
-import Foundation
-
 // MARK: - DiscoverMovies
 struct DiscoverMovies: Codable {
     

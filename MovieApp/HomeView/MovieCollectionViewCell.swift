@@ -24,7 +24,9 @@ final class MovieCollectionViewCell: UICollectionViewCell {
     func configure(movieItem: MovieListResult) {
         movieImage.loadImage(imageURL: movieItem.posterPath ?? "")
      }
-    
+    func configure(movie: DiscoverResult) {
+        movieImage.loadImage(imageURL: movie.posterPath ?? "")
+    }
     
     private func setupImage() {
         movieImage.contentMode = .scaleToFill

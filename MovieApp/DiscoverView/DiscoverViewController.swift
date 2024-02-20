@@ -9,7 +9,7 @@ import UIKit
 
 final class DiscoverViewController: UIViewController {
     
-    private let viewModel = GenresViewModel()
+    private var viewModel = GenresViewModel()
     private var viewModelForGenre = MovieForGenresViewModel()
     
     lazy var genresCollectionView: UICollectionView = {
@@ -71,8 +71,11 @@ extension DiscoverViewController: UICollectionViewDelegate, UICollectionViewData
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-       let movieVC = MovieForGenreViewController()
-        viewModelForGenre = MovieForGenresViewModel(id: viewModelForGenre.movies[indexPath.item].id ?? 0)
+        let movieVC = MovieForGenreViewController()
+        let selectedGenreId = viewModel.genre(at: indexPath.item).id ?? 0
+        movieVC.viewModelForGenre = MovieForGenresViewModel(id: selectedGenreId)
+        movieVC.title = "\(viewModel.genre(at: indexPath.item).name ?? "") movies"
+        
         navigationController?.pushViewController(movieVC, animated: true)
     }
     
