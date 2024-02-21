@@ -10,7 +10,8 @@ import UIKit
 final class MovieForGenreViewController: UIViewController {
     
     var viewModelForGenre = MovieForGenresViewModel()
-      
+    var searchBar: UISearchBar!
+    
     lazy var genresCollectionView: UICollectionView = {
         
         let layout = UICollectionViewFlowLayout()
@@ -32,8 +33,8 @@ final class MovieForGenreViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupSearchBar()
         setupLayouts()
-        
         viewModelForGenre.onUpdate = { [weak self] in
             guard let self = self else { return }
             self.genresCollectionView.reloadData()
@@ -42,6 +43,14 @@ final class MovieForGenreViewController: UIViewController {
         viewModelForGenre.fetchDiscover()
     }
     
+    private func setupSearchBar() {
+        searchBar = UISearchBar()
+        searchBar.placeholder = "Search for movies"
+        searchBar.delegate = self
+        searchBar.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(searchBar)
+//        navigationItem.titleView = searchBar
+    }
 
 }
 extension MovieForGenreViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
@@ -57,8 +66,23 @@ extension MovieForGenreViewController: UICollectionViewDelegate, UICollectionVie
         
         return cell
     }
-    
-    
+}
+
+extension MovieForGenreViewController: UISearchBarDelegate {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        
+        if searchText.isEmpty {
+            viewModelForGenre.movies = viewModelForGenre.originalMovies
+            genresCollectionView.reloadData()
+        } else {
+            viewModelForGenre.movies = viewModelForGenre.originalMovies.filter { movie in
+                guard let title = movie.title else { return false }
+                let movieee = title.lowercased().contains(searchText.lowercased())
+                return movieee
+            }
+            genresCollectionView.reloadData()
+        }
+    }
 }
 
 extension MovieForGenreViewController {
@@ -66,7 +90,12 @@ extension MovieForGenreViewController {
     func setupLayouts() {
         
         NSLayoutConstraint.activate([
-            genresCollectionView.topAnchor.constraint(equalTo: view.topAnchor),
+            searchBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            searchBar.heightAnchor.constraint(equalToConstant: 40),
+            
+            genresCollectionView.topAnchor.constraint(equalTo: searchBar.bottomAnchor,constant: 8),
             genresCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             genresCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             genresCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)

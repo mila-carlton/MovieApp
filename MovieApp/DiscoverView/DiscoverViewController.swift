@@ -74,8 +74,7 @@ extension DiscoverViewController: UICollectionViewDelegate, UICollectionViewData
         let movieVC = MovieForGenreViewController()
         let selectedGenreId = viewModel.genre(at: indexPath.item).id ?? 0
         movieVC.viewModelForGenre = MovieForGenresViewModel(id: selectedGenreId)
-        movieVC.title = "\(viewModel.genre(at: indexPath.item).name ?? "") movies"
-        
+//        movieVC.title = "\(viewModel.genre(at: indexPath.item).name ?? "") movies"
         navigationController?.pushViewController(movieVC, animated: true)
     }
     
