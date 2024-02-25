@@ -11,6 +11,7 @@ final class HomeViewController: UIViewController {
     
     
     lazy var movieTableView: UITableView = {
+        
         let tableView = UITableView()//
         tableView.rowHeight = 270
         tableView.register(MoviesTableViewCell.self, forCellReuseIdentifier: MoviesTableViewCell.id)

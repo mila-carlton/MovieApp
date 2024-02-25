@@ -9,11 +9,10 @@ import Foundation
 
 final class DetailsViewModel {
    
-    
     private var movieId: Int!
     
-    
     private(set) var movieDetails: MovieDetailsModel?
+    private(set) var videoView: [VideoResult] = []
     
     private let webService = WebService.shared
     
@@ -28,6 +27,16 @@ final class DetailsViewModel {
                 return }
             self.movieDetails = movieDetails
             complete()
+        }
+    }
+    
+    func fetchVideos(completion: @escaping (()->Void) ) {
+        webService.fetchVideo(id: movieId) { [weak self] video in
+            guard let self = self, let videoDetails = video else { completion()
+                return }
+            self.videoView = videoDetails
+            print("Video ok")
+            completion()
         }
     }
     

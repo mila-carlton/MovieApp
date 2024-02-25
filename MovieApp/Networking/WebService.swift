@@ -21,6 +21,7 @@ final class WebService {
         case upComing = "https://api.themoviedb.org/3/movie/upcoming"
         case details = "https://api.themoviedb.org/3/movie/"
         case discover = "https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc"
+        case video = "https://api.themoviedb.org/3/movie/933131/videos?language=en-US"
         
     }
     
@@ -81,6 +82,18 @@ final class WebService {
             switch result {
             case .success(let discover):
                 completion(discover.results)
+            case .failure(_):
+                completion(nil)
+            }
+        }
+    }
+    
+    func fetchVideo(id: Int, completion: @escaping(([VideoResult]?) -> Void) ) {
+        let url = URL(string: URLEndpoints.video.rawValue)!
+        NetworkRequest.shared.requestAPI(type: VideoMovieModel.self, url: url.absoluteString) { result in
+            switch result {
+            case .success(let video):
+                completion(video.results)
             case .failure(_):
                 completion(nil)
             }
