@@ -6,22 +6,25 @@
 //
 
 import UIKit
-import WebKit
 
-final class DetailsViewController: UIViewController, WKNavigationDelegate {
+final class DetailsViewController: UIViewController {
     
-    lazy var webView: WKWebView = {
-        webView = WKWebView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 200))
-        webView.navigationDelegate = self
-        
-        if let youtubeUrl = URL(string: "https://www.youtube.com/embed/\(viewModel.videoView.first?.key ?? "")") {
-            let request = URLRequest(url: youtubeUrl)
-            webView.load(request)
-            print("Loaded")
-        }
-        webView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(webView)
-        return webView
+    lazy var videosCollectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.itemSize = .init(width: view.frame.width, height: 220)
+        layout.minimumLineSpacing = 0
+        layout.minimumInteritemSpacing = 0
+        layout.scrollDirection = .horizontal
+        let collection = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collection.register(UINib(nibName: "YoutubeCell", bundle: .main), forCellWithReuseIdentifier: "YoutubeCell")
+        collection.delegate = self
+        collection.dataSource = self
+        collection.isPagingEnabled = true
+        collection.translatesAutoresizingMaskIntoConstraints = false
+        collection.showsHorizontalScrollIndicator = false
+        collection.allowsSelection = false
+        view.addSubview(collection)
+        return collection
     }()
     
     lazy var movieDetailsView: MovieDetailView = {
@@ -56,6 +59,9 @@ final class DetailsViewController: UIViewController, WKNavigationDelegate {
             self.viewModel.fetchVideos {
                 guard let movieDetails = self.viewModel.movieDetails else { return }
                 self.movieDetailsView.configure(details: movieDetails)
+                DispatchQueue.main.async {
+                    self.videosCollectionView.reloadData()
+                }
                 print("Done")
             }
         }
@@ -64,14 +70,14 @@ final class DetailsViewController: UIViewController, WKNavigationDelegate {
     
     private func autoLayout() {
         NSLayoutConstraint.activate([
-            webView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            webView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 4),
-            webView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -4),
-            webView.heightAnchor.constraint(equalToConstant: 200),
+            videosCollectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            videosCollectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 4),
+            videosCollectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -4),
+            videosCollectionView.heightAnchor.constraint(equalToConstant: 220),
             
             movieDetailsView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 4),
             movieDetailsView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -4),
-            movieDetailsView.topAnchor.constraint(equalTo: webView.bottomAnchor, constant: 12),
+            movieDetailsView.topAnchor.constraint(equalTo: videosCollectionView.bottomAnchor, constant: 12),
             movieDetailsView.heightAnchor.constraint(equalToConstant: 300)
         
         
@@ -80,4 +86,20 @@ final class DetailsViewController: UIViewController, WKNavigationDelegate {
 
 }
 
+
+extension DetailsViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        viewModel.videoResults.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "YoutubeCell", for: indexPath) as! YoutubeCell
+        cell.backgroundColor = .red
+        cell.configure(video: viewModel.videoResults[indexPath.item])
+        return cell
+    }
+    
+}
 

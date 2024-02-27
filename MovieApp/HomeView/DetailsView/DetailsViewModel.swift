@@ -12,7 +12,7 @@ final class DetailsViewModel {
     private var movieId: Int!
     
     private(set) var movieDetails: MovieDetailsModel?
-    private(set) var videoView: [VideoResult] = []
+    private(set) var videoResults: [VideoResult] = []
     
     private let webService = WebService.shared
     
@@ -34,7 +34,7 @@ final class DetailsViewModel {
         webService.fetchVideo(id: movieId) { [weak self] video in
             guard let self = self, let videoDetails = video else { completion()
                 return }
-            self.videoView = videoDetails
+            self.videoResults = videoDetails
             print("Video ok")
             completion()
         }

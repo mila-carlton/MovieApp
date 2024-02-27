@@ -89,7 +89,7 @@ final class WebService {
     }
     
     func fetchVideo(id: Int, completion: @escaping(([VideoResult]?) -> Void) ) {
-        let url = URL(string: URLEndpoints.video.rawValue)!
+        let url = URL(string: "https://api.themoviedb.org/3/movie/\(id)/videos?language=en-US")!
         NetworkRequest.shared.requestAPI(type: VideoMovieModel.self, url: url.absoluteString) { result in
             switch result {
             case .success(let video):
