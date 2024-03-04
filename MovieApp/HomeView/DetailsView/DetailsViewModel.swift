@@ -13,6 +13,8 @@ final class DetailsViewModel {
     
     private(set) var movieDetails: MovieDetailsModel?
     private(set) var videoResults: [VideoResult] = []
+    private(set) var movieCastResults: [Cast] = []
+    private(set) var similarMovies: [MovieListResult] = []
     
     private let webService = WebService.shared
     
@@ -35,7 +37,24 @@ final class DetailsViewModel {
             guard let self = self, let videoDetails = video else { completion()
                 return }
             self.videoResults = videoDetails
-            print("Video ok")
+            completion()
+        }
+    }
+    
+    func fetchCast(completion: @escaping(()->Void) ) {
+        webService.fetchCast(id: movieId) { [weak self] casts in
+            guard let self = self, let allCast = casts else { completion ()
+                return }
+            self.movieCastResults = allCast
+            completion()
+        }
+    }
+    
+    func fetchSimilar(completion: @escaping(() -> Void)) {
+        webService.fetchSimilar(id: movieId) { [weak self] similar in
+            guard let self = self, let allSimilar = similar else { completion()
+            return }
+            self.similarMovies = allSimilar
             completion()
         }
     }

@@ -99,4 +99,28 @@ final class WebService {
             }
         }
     }
+    
+    func fetchCast(id: Int, completion: @escaping(([Cast]?) -> Void) ) {
+        let url = URL(string: "https://api.themoviedb.org/3/movie/\(id)/credits?language=en-US")!
+        NetworkRequest.shared.requestAPI(type: CastsResponse.self, url: url.absoluteString) { result in
+            switch result {
+            case .success(let cast):
+                completion(cast.cast)
+            case .failure(_):
+                completion(nil)
+            }
+        }
+    }
+    
+    func fetchSimilar(id: Int, completion: @escaping(([MovieListResult]?) -> Void) ) {
+        let url = URL(string: "https://api.themoviedb.org/3/movie/\(id)/similar?language=en-US&page=1")!
+        NetworkRequest.shared.requestAPI(type: MovieList.self, url: url.absoluteString) { result in
+            switch result {
+            case .success(let similar):
+                completion(similar.results)
+            case .failure(_):
+                completion(nil)
+            }
+        }
+    }
 }

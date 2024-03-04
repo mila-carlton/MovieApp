@@ -9,31 +9,17 @@ import UIKit
 
 final class DetailsViewController: UIViewController {
     
-    lazy var videosCollectionView: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        layout.itemSize = .init(width: view.frame.width, height: 220)
-        layout.minimumLineSpacing = 0
-        layout.minimumInteritemSpacing = 0
-        layout.scrollDirection = .horizontal
-        let collection = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collection.register(UINib(nibName: "YoutubeCell", bundle: .main), forCellWithReuseIdentifier: "YoutubeCell")
-        collection.delegate = self
-        collection.dataSource = self
-        collection.isPagingEnabled = true
-        collection.translatesAutoresizingMaskIntoConstraints = false
-        collection.showsHorizontalScrollIndicator = false
-        collection.allowsSelection = false
-        view.addSubview(collection)
-        return collection
+    private lazy var baseTableView: UITableView = {
+        let tableView = UITableView()
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.register(MovieDetailsBaseTableCell.self, forCellReuseIdentifier: MovieDetailsBaseTableCell.id)
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.showsVerticalScrollIndicator = false
+        view.addSubview(tableView)
+        return tableView
     }()
     
-    lazy var movieDetailsView: MovieDetailView = {
-        let detailsView = MovieDetailView()
-        detailsView.translatesAutoresizingMaskIntoConstraints = false
-        detailsView.backgroundColor = .systemBackground
-        view.addSubview(detailsView)
-        return detailsView
-    }()
     
     
     var viewModel: DetailsViewModel
@@ -41,6 +27,7 @@ final class DetailsViewController: UIViewController {
     init(viewModel: DetailsViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
+        
     }
     
     required init?(coder: NSCoder) {
@@ -50,56 +37,57 @@ final class DetailsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         autoLayout()
+        view.backgroundColor = .systemBackground
         getMovieDetails()
+        
     }
+    
     
     
     func getMovieDetails() {
         viewModel.fetchDetails {
             self.viewModel.fetchVideos {
-                guard let movieDetails = self.viewModel.movieDetails else { return }
-                self.movieDetailsView.configure(details: movieDetails)
-                DispatchQueue.main.async {
-                    self.videosCollectionView.reloadData()
+                self.viewModel.fetchCast {
+                    self.viewModel.fetchSimilar {
+                        DispatchQueue.main.async {
+                            self.baseTableView.reloadData()
+                        }
+                        
+                    }
                 }
-                print("Done")
+        
             }
         }
     }
     
-    
-    private func autoLayout() {
+    func autoLayout() {
         NSLayoutConstraint.activate([
-            videosCollectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            videosCollectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 4),
-            videosCollectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -4),
-            videosCollectionView.heightAnchor.constraint(equalToConstant: 220),
-            
-            movieDetailsView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 4),
-            movieDetailsView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -4),
-            movieDetailsView.topAnchor.constraint(equalTo: videosCollectionView.bottomAnchor, constant: 12),
-            movieDetailsView.heightAnchor.constraint(equalToConstant: 300)
-        
+            baseTableView.topAnchor.constraint(equalTo: view.topAnchor),
+            baseTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            baseTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            baseTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         
         ])
     }
-
+    
+    
 }
 
-
-extension DetailsViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+extension DetailsViewController: UITableViewDelegate, UITableViewDataSource {
     
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        viewModel.videoResults.count
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        1
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "YoutubeCell", for: indexPath) as! YoutubeCell
-        cell.backgroundColor = .red
-        cell.configure(video: viewModel.videoResults[indexPath.item])
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: MovieDetailsBaseTableCell.id, for: indexPath) as! MovieDetailsBaseTableCell
+        cell.configure(videoResults: viewModel.videoResults, movieDetails: viewModel.movieDetails, movieCasts: viewModel.movieCastResults, similarMovies: viewModel.similarMovies)
         return cell
     }
     
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        UITableView.automaticDimension
+    }
 }
+
 
