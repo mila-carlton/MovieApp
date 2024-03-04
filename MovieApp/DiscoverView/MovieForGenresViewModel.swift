@@ -23,7 +23,6 @@ final class MovieForGenresViewModel {
     }
     
     func fetchDiscover() {
-        
         webService.fetchDiscover(movieId: genreId) { [weak self] discover in
             guard let self = self else { return }
             DispatchQueue.main.async {

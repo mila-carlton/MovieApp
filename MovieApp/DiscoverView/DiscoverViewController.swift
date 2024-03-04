@@ -12,7 +12,7 @@ final class DiscoverViewController: UIViewController {
     private var viewModel = GenresViewModel()
     private var viewModelForGenre = MovieForGenresViewModel()
     
-    lazy var genresCollectionView: UICollectionView = {
+    private lazy var genresCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         layout.minimumLineSpacing = 10
@@ -25,7 +25,7 @@ final class DiscoverViewController: UIViewController {
         collectionView.dataSource = self
         collectionView.delegate = self
         
-        collectionView.backgroundColor = .clear
+        collectionView.backgroundColor = .customBackgroundColor
         view.addSubview(collectionView)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -37,10 +37,19 @@ final class DiscoverViewController: UIViewController {
         return collectionView
     }()
     
+    private lazy var searchButton: UIBarButtonItem = {
+        let button = UIButton(type: .system)
+        button.setImage(UIImage(systemName: "magnifyingglass"), for: .normal)
+        button.addTarget(self, action: #selector(searchButtonTapped), for: .touchUpInside)
+        let searchItem = UIBarButtonItem(customView: button)
+        return searchItem
+    }()
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .customBackgroundColor
+        navigationItem.rightBarButtonItem = searchButton
         
         viewModel.onUpdate = { [weak self] in
             guard let self = self else { return }
@@ -49,6 +58,11 @@ final class DiscoverViewController: UIViewController {
         viewModel.fetchGenres()
     }
     
+    @objc
+    func searchButtonTapped() {
+        let searchVC = SearchViewController()
+        navigationController?.pushViewController(searchVC, animated: true)
+    }
 
 }
 
@@ -74,11 +88,8 @@ extension DiscoverViewController: UICollectionViewDelegate, UICollectionViewData
         let movieVC = MovieForGenreViewController()
         let selectedGenreId = viewModel.genre(at: indexPath.item).id ?? 0
         movieVC.viewModelForGenre = MovieForGenresViewModel(id: selectedGenreId)
-//        movieVC.title = "\(viewModel.genre(at: indexPath.item).name ?? "") movies"
         navigationController?.pushViewController(movieVC, animated: true)
     }
-    
-    
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         

@@ -12,7 +12,7 @@ final class MovieForGenreViewController: UIViewController {
     var viewModelForGenre = MovieForGenresViewModel()
     var searchBar: UISearchBar!
     
-    lazy var genresCollectionView: UICollectionView = {
+    private lazy var genresCollectionView: UICollectionView = {
         
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
@@ -30,6 +30,7 @@ final class MovieForGenreViewController: UIViewController {
         view.addSubview(collectionView)
         return collectionView
     }()
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,7 +50,6 @@ final class MovieForGenreViewController: UIViewController {
         searchBar.delegate = self
         searchBar.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(searchBar)
-//        navigationItem.titleView = searchBar
     }
 
 }
@@ -90,6 +90,7 @@ extension MovieForGenreViewController {
     func setupLayouts() {
         
         NSLayoutConstraint.activate([
+            
             searchBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),

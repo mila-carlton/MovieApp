@@ -31,8 +31,6 @@ final class HomeViewController: UIViewController {
     }()
     
     
-    
-    
     private let viewModel = HomeViewModel()
     
     override func viewDidLoad() {

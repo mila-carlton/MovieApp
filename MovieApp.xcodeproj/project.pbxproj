@@ -48,6 +48,7 @@
 		655ABA6E2B92390C00168EB9 /* CastsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 655ABA6D2B92390C00168EB9 /* CastsModel.swift */; };
 		655ABA722B923B0600168EB9 /* MovieDetailsBaseTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 655ABA712B923B0600168EB9 /* MovieDetailsBaseTableCell.swift */; };
 		655ABA742B92438B00168EB9 /* CastCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 655ABA732B92438B00168EB9 /* CastCollectionViewCell.swift */; };
+		655ABA762B96323C00168EB9 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 655ABA752B96323C00168EB9 /* SearchViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -92,6 +93,7 @@
 		655ABA6D2B92390C00168EB9 /* CastsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CastsModel.swift; sourceTree = "<group>"; };
 		655ABA712B923B0600168EB9 /* MovieDetailsBaseTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieDetailsBaseTableCell.swift; sourceTree = "<group>"; };
 		655ABA732B92438B00168EB9 /* CastCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CastCollectionViewCell.swift; sourceTree = "<group>"; };
+		655ABA752B96323C00168EB9 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -148,6 +150,7 @@
 				6554DEE52B72B48B00343657 /* DiscoverViewController.swift */,
 				6554DEED2B72BC6300343657 /* DiscoverModel.swift */,
 				6554DEEF2B72BC7E00343657 /* DiscoverViewModel.swift */,
+				655ABA752B96323C00168EB9 /* SearchViewController.swift */,
 				6554DF252B82436600343657 /* MovieForGenreViewController.swift */,
 				6554DF272B83B41200343657 /* MovieForGenresModel.swift */,
 				6554DF292B83B45D00343657 /* MovieForGenresViewModel.swift */,
@@ -331,6 +334,7 @@
 				6554DF1E2B7E6B5200343657 /* DetailsViewController.swift in Sources */,
 				6554DEEA2B72B4E700343657 /* HomeViewController.swift in Sources */,
 				6554DF2A2B83B45D00343657 /* MovieForGenresViewModel.swift in Sources */,
+				655ABA762B96323C00168EB9 /* SearchViewController.swift in Sources */,
 				6554DF122B75543B00343657 /* MovieCollectionViewCell.swift in Sources */,
 				6554DF242B7E6EBF00343657 /* CustomDetailsView.swift in Sources */,
 				6554DF262B82436600343657 /* MovieForGenreViewController.swift in Sources */,
