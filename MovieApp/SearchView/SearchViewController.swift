@@ -9,9 +9,8 @@ import UIKit
 
 final class SearchViewController: UIViewController, UISearchBarDelegate, UISearchResultsUpdating {
     
+    let viewModel = SearchViewModel()
     let searchController = UISearchController(searchResultsController: nil)
-    
-    var viewModelForGenre = MovieForGenresViewModel()
     
     private lazy var searchCollectionView: UICollectionView = {
         
@@ -24,7 +23,8 @@ final class SearchViewController: UIViewController, UISearchBarDelegate, UISearc
             height: 210)
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.register(MovieCollectionViewCell.self, forCellWithReuseIdentifier: MovieCollectionViewCell.id)
-        
+        collectionView.backgroundColor = .customBackgroundColor
+        collectionView.showsVerticalScrollIndicator = false
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -32,62 +32,52 @@ final class SearchViewController: UIViewController, UISearchBarDelegate, UISearc
         return collectionView
     }()
     
-
+  
     override func viewDidLoad() {
         super.viewDidLoad()
-       setupSearchVC()
+        setupSearchVC()
         setupLayouts()
-        
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        DispatchQueue.main.async {
-            [unowned self] in
-            self.searchController.isActive = true
-            self.searchController.searchBar.becomeFirstResponder()
-        }
+    override func viewWillLayoutSubviews() {
+        searchController.isActive = true
+        searchController.searchBar.becomeFirstResponder()
     }
     
     func setupSearchVC() {
         searchController.searchResultsUpdater = self
-        searchController.obscuresBackgroundDuringPresentation = false
         searchController.searchBar.placeholder = "Search"
         navigationItem.searchController = searchController
-        definesPresentationContext = true
+        navigationItem.hidesSearchBarWhenScrolling = false
     }
     
     func updateSearchResults(for searchController: UISearchController) {
-        guard let searchText = searchController.searchBar.text else { return }
-        
-                if searchText.isEmpty {
-                    viewModelForGenre.movies = viewModelForGenre.originalMovies
-                    searchCollectionView.reloadData()
-                } else {
-                    viewModelForGenre.movies = viewModelForGenre.originalMovies.filter { movie in
-                        guard let title = movie.title else { return false }
-                        let movieee = title.lowercased().contains(searchText.lowercased())
-                        return movieee
-                    }
-                    searchCollectionView.reloadData()
-                }
+        guard let query = searchController.searchBar.text, !query.isEmpty else { viewModel.movies.removeAll()
+            DispatchQueue.main.async {
+                self.searchCollectionView.reloadData()
+            }
+        return }
+        viewModel.getSearchMovies(query: query) { [weak self] in
+            guard let self = self else { return }
+            DispatchQueue.main.async {
+                self.searchCollectionView.reloadData()
             }
         }
-
-extension SearchViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        viewModelForGenre.movies.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MovieCollectionViewCell.id , for: indexPath) as? MovieCollectionViewCell else { return UICollectionViewCell() }
-        let discoverItem = viewModelForGenre.movies[indexPath.item]
-            cell.configure(movie: discoverItem)
-        
-        return cell
     }
 }
+    extension SearchViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+        
+        func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+            viewModel.movies.count
+        }
+        
+        func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MovieCollectionViewCell.id , for: indexPath) as? MovieCollectionViewCell else { return UICollectionViewCell() }
+            let movie = viewModel.movies[indexPath.item]
+            cell.configure(searchMovie: movie)
+            return cell
+        }
+    }
 
 extension SearchViewController {
     

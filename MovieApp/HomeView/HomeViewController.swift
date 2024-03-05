@@ -18,6 +18,7 @@ final class HomeViewController: UIViewController {
         
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.backgroundColor = .customBackgroundColor
         view.addSubview(tableView)
         tableView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -70,8 +71,6 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
         cell.seeAllMovieesDelegate = self
         return cell
     }
-    
-    
 }
 
 extension HomeViewController: AllMovieSeeDelegate {

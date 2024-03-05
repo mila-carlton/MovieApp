@@ -12,7 +12,6 @@ struct HomeMovies {
     let movieList: [MovieListResult]
 }
 
-
 final class HomeViewModel {
     private var movies: [MovieListResult] = []
     let webService = WebService.shared
@@ -57,5 +56,5 @@ final class HomeViewModel {
     func cellForRowAt(index: Int) -> HomeMovies {
         return homeMovies[index]
     }
+    
 }
-

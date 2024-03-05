@@ -135,4 +135,16 @@ final class WebService {
             }
         }
     }
+    
+    func fetchSearch(query: String, completion: @escaping(([SearchResult]?) -> Void)) {
+        let url = URL(string: "https://api.themoviedb.org/3/search/movie?query=\(query)&include_adult=false&language=en-US&page=1")!
+        NetworkRequest.shared.requestAPI(type: SearchModel.self, url: url.absoluteString) { result in
+            switch  result {
+            case .success(let search):
+                completion(search.results)
+            case .failure(_):
+                completion(nil)
+            }
+        }
+    }
 }
