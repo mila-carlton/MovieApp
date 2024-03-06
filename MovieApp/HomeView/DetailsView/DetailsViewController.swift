@@ -20,8 +20,6 @@ final class DetailsViewController: UIViewController {
         return tableView
     }()
     
-    
-    
     var viewModel: DetailsViewModel
     
     init(viewModel: DetailsViewModel) {
@@ -36,9 +34,10 @@ final class DetailsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .customBackgroundColor
         autoLayout()
-        view.backgroundColor = .systemBackground
         getMovieDetails()
+        setupRightBarButton()
         
     }
     
@@ -60,7 +59,31 @@ final class DetailsViewController: UIViewController {
         }
     }
     
-    func autoLayout() {
+    private func setupRightBarButton() {
+        let loadingButton = UIBarButtonItem(image: UIImage(systemName: "arrow.down.circle"), style: .plain, target: self, action:  #selector(startLoading))
+        navigationItem.rightBarButtonItem = loadingButton
+    }
+    
+    @objc
+    private func startLoading() {
+        showLoadingIndicator()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {
+            self.hideLoadingIndicator()
+        })
+    }
+    
+    private func showLoadingIndicator() {
+        let activityIndicator = UIActivityIndicatorView(style: .medium)
+        activityIndicator.startAnimating()
+        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: activityIndicator)
+    }
+    
+    private func hideLoadingIndicator() {
+        let checkmarkButton = UIBarButtonItem(image: UIImage(systemName: "checkmark.circle"), style: .plain, target: nil, action: nil)
+        navigationItem.rightBarButtonItem = checkmarkButton
+    }
+    
+    private func autoLayout() {
         NSLayoutConstraint.activate([
             baseTableView.topAnchor.constraint(equalTo: view.topAnchor),
             baseTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -69,7 +92,6 @@ final class DetailsViewController: UIViewController {
         
         ])
     }
-    
     
 }
 

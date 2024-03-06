@@ -13,7 +13,7 @@ final class MovieDetailsBaseTableCell: UITableViewCell {
     
     private lazy var videosCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
-        layout.itemSize = .init(width: contentView.frame.width, height: 220)
+        layout.itemSize = .init(width: UIScreen.main.bounds.width, height: 220)
         layout.minimumLineSpacing = 0
         layout.minimumInteritemSpacing = 0
         layout.scrollDirection = .horizontal
