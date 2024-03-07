@@ -77,7 +77,8 @@ final class WebService {
     }
     
     func fetchDiscover(movieId: Int, completion: @escaping (([DiscoverResult]?) -> Void) )  {
-        let url = URL(string: URLEndpoints.discover.rawValue)!
+        let url = URL(string: "https://api.themoviedb.org/3/discover/movie?with_genres=\(movieId)")!
+        
         NetworkRequest.shared.requestAPI(type: DiscoverMovies.self, url: url.absoluteString) { result in
             switch result {
             case .success(let discover):
@@ -88,17 +89,7 @@ final class WebService {
         }
     }
     
-    func fetchSearchMovie(completion: @escaping (([DiscoverResult]?) -> Void) )  {
-        let url = URL(string: URLEndpoints.discover.rawValue)!
-        NetworkRequest.shared.requestAPI(type: DiscoverMovies.self, url: url.absoluteString) { result in
-            switch result {
-            case .success(let discover):
-                completion(discover.results)
-            case .failure(_):
-                completion(nil)
-            }
-        }
-    }
+
     
     func fetchVideo(id: Int, completion: @escaping(([VideoResult]?) -> Void) ) {
         let url = URL(string: "https://api.themoviedb.org/3/movie/\(id)/videos?language=en-US")!

@@ -15,7 +15,8 @@ extension UIImageView {
             self.kf.setImage(with: url, placeholder: nil, options: [.transition(.fade(0.2))]) { result in
                 switch result {
                 case .success(let value):
-                    print("Image loaded: \(value.source.url?.absoluteString ?? "")")
+                    //print("Image loaded: \(value.source.url?.absoluteString ?? "")")
+                    print("")
                 case .failure(let error):
                     print("Error loading image: \(error.localizedDescription)")
                 }

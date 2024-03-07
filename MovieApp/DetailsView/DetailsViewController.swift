@@ -16,6 +16,7 @@ final class DetailsViewController: UIViewController {
         tableView.register(MovieDetailsBaseTableCell.self, forCellReuseIdentifier: MovieDetailsBaseTableCell.id)
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.showsVerticalScrollIndicator = false
+        tableView.allowsSelection = false
         view.addSubview(tableView)
         return tableView
     }()
@@ -61,15 +62,24 @@ final class DetailsViewController: UIViewController {
     
     private func setupRightBarButton() {
         let loadingButton = UIBarButtonItem(image: UIImage(systemName: "arrow.down.circle"), style: .plain, target: self, action:  #selector(startLoading))
+        
         navigationItem.rightBarButtonItem = loadingButton
     }
     
     @objc
     private func startLoading() {
         showLoadingIndicator()
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {
-            self.hideLoadingIndicator()
-        })
+        viewModel.downloadVideo(movieTitle: viewModel.movieDetails?.title ?? "", trailerId: viewModel.videoResults.first?.key ?? "") {
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {
+                self.hideLoadingIndicator()
+                
+            })
+            
+            
+            
+        }
+
     }
     
     private func showLoadingIndicator() {
@@ -81,6 +91,13 @@ final class DetailsViewController: UIViewController {
     private func hideLoadingIndicator() {
         let checkmarkButton = UIBarButtonItem(image: UIImage(systemName: "checkmark.circle"), style: .plain, target: nil, action: nil)
         navigationItem.rightBarButtonItem = checkmarkButton
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: {
+            if let tabBarController =  self.tabBarController {
+                tabBarController.selectedIndex = 3
+            }
+            
+        })
+                
     }
     
     private func autoLayout() {
@@ -104,6 +121,14 @@ extension DetailsViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: MovieDetailsBaseTableCell.id, for: indexPath) as! MovieDetailsBaseTableCell
         cell.configure(videoResults: viewModel.videoResults, movieDetails: viewModel.movieDetails, movieCasts: viewModel.movieCastResults, similarMovies: viewModel.similarMovies)
+        
+        cell.seeAllCastButtonTapHandler = { [weak self] in
+            guard let self = self else { return }
+            let allVC = SeeAllCastsViewController(casts: self.viewModel.movieCastResults)
+            navigationController?.pushViewController(allVC, animated: true)
+            
+        }
+        
         return cell
     }
     

@@ -30,6 +30,9 @@ final class MovieCollectionViewCell: UICollectionViewCell {
     func configure(searchMovie: SearchResult) {
         movieImage.loadImage(imageURL: searchMovie.posterPath ?? "")
     }
+    func configure(casts: Cast) {
+        movieImage.loadImage(imageURL: casts.profilePath ?? "")
+    }
     
     private func setupImage() {
         movieImage.contentMode = .scaleToFill

@@ -50,6 +50,32 @@ class NetworkRequest {
             completion(.failure(error))
         }
     }
+    
+    
+    func downloadYouTubeVideo(from url: URL, saveTo destinationURL: URL, completion: @escaping (Error?) -> Void) {
+        let task = URLSession.shared.downloadTask(with: url) { (tempLocalURL, response, error) in
+            if let error = error {
+                completion(error)
+                return
+            }
+            
+            guard let tempLocalURL = tempLocalURL else {
+                let unknownError = NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Failed to download video"])
+                completion(unknownError)
+                return
+            }
+            
+            do {
+                try FileManager.default.moveItem(at: tempLocalURL, to: destinationURL)
+                print("Download completed. Video saved as:", destinationURL.path)
+                completion(nil)
+            } catch {
+                completion(error)
+            }
+        }
+        
+        task.resume()
+    }
 }
 
 enum NetworkMethod: String {

@@ -58,7 +58,7 @@ final class MovieDetailsBaseTableCell: UITableViewCell {
     private lazy var similarMoviesCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
-        layout.itemSize = .init(width: ((contentView.frame.width/2.5) - 18), height: 220)
+        layout.itemSize = .init(width: ((contentView.frame.width/2.5) - 18), height: 190)
         layout.minimumLineSpacing = 8
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.register(MovieCollectionViewCell.self, forCellWithReuseIdentifier: MovieCollectionViewCell.id)
@@ -79,6 +79,19 @@ final class MovieDetailsBaseTableCell: UITableViewCell {
         label.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(label)
         return label
+    }()
+    
+    
+    private lazy var seeAllCastButton: UIButton = {
+       let button = UIButton()
+        button.setTitle("See all", for: .normal)
+        button.setTitleColor(.red, for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 15, weight: .medium)
+        button.backgroundColor = .clear
+        button.addTarget(self, action: #selector(seeAllCastButtonPressed), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(button)
+        return button
     }()
     
     private lazy var similarLabel: UILabel = {
@@ -130,6 +143,8 @@ final class MovieDetailsBaseTableCell: UITableViewCell {
             self.movieDetailsView.configure(details: movieDetails)
         }
     }
+    
+    var seeAllCastButtonTapHandler: (()->Void)?
 
     func configure(videoResults: [VideoResult], movieDetails: MovieDetailsModel?, movieCasts: [Cast], similarMovies: [MovieListResult]) {
         
@@ -139,7 +154,10 @@ final class MovieDetailsBaseTableCell: UITableViewCell {
         self.movieDetails = movieDetails
     }
     
-
+    @objc
+    func seeAllCastButtonPressed() {
+        seeAllCastButtonTapHandler?()
+    }
 
     private func autoLayout() {
         NSLayoutConstraint.activate([
@@ -154,10 +172,17 @@ final class MovieDetailsBaseTableCell: UITableViewCell {
             movieDetailsView.topAnchor.constraint(equalTo: videosCollectionView.bottomAnchor, constant: 12),
             movieDetailsView.heightAnchor.constraint(equalToConstant: 310),
             
+            
             castLabel.topAnchor.constraint(equalTo: movieDetailsView.bottomAnchor, constant: 12),
             castLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 4),
-            castLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -4),
+            castLabel.widthAnchor.constraint(lessThanOrEqualToConstant: 150),
             castLabel.heightAnchor.constraint(equalToConstant: 20),
+            
+            seeAllCastButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -4),
+            seeAllCastButton.centerYAnchor.constraint(equalTo: castLabel.centerYAnchor),
+            seeAllCastButton.widthAnchor.constraint(equalToConstant: 80),
+            
+            
             
             castsCollectionView.topAnchor.constraint(equalTo: castLabel.bottomAnchor, constant: 8),
             castsCollectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 4),

@@ -21,7 +21,7 @@ final class SeeAllViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    lazy var allCollectionView: UICollectionView = {
+    private lazy var allCollectionView: UICollectionView = {
         
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
@@ -58,7 +58,14 @@ extension SeeAllViewController: UICollectionViewDelegate, UICollectionViewDataSo
         return cell
     }
     
-    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        let detailsVM = DetailsViewModel(movieId: movies[indexPath.item].id ?? 0)
+        
+        let detailsVc = DetailsViewController(viewModel: detailsVM)
+        
+        self.navigationController?.pushViewController(detailsVc, animated: true)
+    }
 }
 extension SeeAllViewController {
     
