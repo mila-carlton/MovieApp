@@ -37,7 +37,6 @@ final class MovieDetailsBaseTableCell: UITableViewCell {
         return detailsView
     }()
     
-
     
     private lazy var castsCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -103,6 +102,18 @@ final class MovieDetailsBaseTableCell: UITableViewCell {
         contentView.addSubview(label)
         return label
     }()
+    
+    private lazy var seeAllSimilarButton: UIButton = {
+       let button = UIButton()
+        button.setTitle("See all", for: .normal)
+        button.setTitleColor(.red, for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 15, weight: .medium)
+        button.backgroundColor = .clear
+        button.addTarget(self, action: #selector(seeAllSimilarButtonPressed), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(button)
+        return button
+    }()
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -145,6 +156,7 @@ final class MovieDetailsBaseTableCell: UITableViewCell {
     }
     
     var seeAllCastButtonTapHandler: (()->Void)?
+    var seeAllSimilarButtonTapHandler: (()->Void)?
 
     func configure(videoResults: [VideoResult], movieDetails: MovieDetailsModel?, movieCasts: [Cast], similarMovies: [MovieListResult]) {
         
@@ -157,6 +169,11 @@ final class MovieDetailsBaseTableCell: UITableViewCell {
     @objc
     func seeAllCastButtonPressed() {
         seeAllCastButtonTapHandler?()
+    }
+    
+    @objc
+    func seeAllSimilarButtonPressed() {
+        seeAllSimilarButtonTapHandler?()
     }
 
     private func autoLayout() {
@@ -182,8 +199,6 @@ final class MovieDetailsBaseTableCell: UITableViewCell {
             seeAllCastButton.centerYAnchor.constraint(equalTo: castLabel.centerYAnchor),
             seeAllCastButton.widthAnchor.constraint(equalToConstant: 80),
             
-            
-            
             castsCollectionView.topAnchor.constraint(equalTo: castLabel.bottomAnchor, constant: 8),
             castsCollectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 4),
             castsCollectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -4),
@@ -193,6 +208,10 @@ final class MovieDetailsBaseTableCell: UITableViewCell {
             similarLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 4),
             similarLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -4),
             similarLabel.heightAnchor.constraint(equalToConstant: 20),
+            
+            seeAllSimilarButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -4),
+            seeAllSimilarButton.centerYAnchor.constraint(equalTo: similarLabel.centerYAnchor),
+            seeAllSimilarButton.widthAnchor.constraint(equalToConstant: 80),
         
             similarMoviesCollectionView.topAnchor.constraint(equalTo: similarLabel.bottomAnchor, constant: 8),
             similarMoviesCollectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 4),

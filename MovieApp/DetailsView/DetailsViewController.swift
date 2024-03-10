@@ -129,6 +129,13 @@ extension DetailsViewController: UITableViewDelegate, UITableViewDataSource {
             
         }
         
+        cell.seeAllSimilarButtonTapHandler = { [weak self] in
+            guard let self = self else { return }
+            let allVC = SeeAllSimilarViewController(similar: self.viewModel.similarMovies)
+            navigationController?.pushViewController(allVC, animated: true)
+            
+        }
+        
         return cell
     }
     

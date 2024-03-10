@@ -138,4 +138,16 @@ final class WebService {
             }
         }
     }
+    
+    func fetchCastDetails(id: Int, completion: @escaping((CastDetailsModel?) -> Void )) {
+        let url = URL(string: "https://api.themoviedb.org/3/person/\(id)?language=en-US")!
+        NetworkRequest.shared.requestAPI(type: CastDetailsModel.self, url: url.absoluteString) { result in
+            switch result {
+            case .success(let details):
+                completion(details)
+            case .failure(_):
+                completion(nil)
+            }
+        }
+    }
 }

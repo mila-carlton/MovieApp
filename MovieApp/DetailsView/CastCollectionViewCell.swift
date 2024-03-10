@@ -61,7 +61,6 @@ final class CastCollectionViewCell: UICollectionViewCell {
             castImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 4),
             castImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             castImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-           // castImageView.widthAnchor.constraint(equalToConstant: 60),
             castImageView.heightAnchor.constraint(equalToConstant: 180),
             
             nameLabel.topAnchor.constraint(equalTo: castImageView.bottomAnchor, constant: 4),

@@ -56,6 +56,15 @@ extension MovieForGenreViewController: UICollectionViewDelegate, UICollectionVie
         
         return cell
     }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        let detailsVM = DetailsViewModel(movieId: viewModelForGenre.movies[indexPath.item].id ?? 0)
+        
+        let detailsVc = DetailsViewController(viewModel: detailsVM)
+        
+        self.navigationController?.pushViewController(detailsVc, animated: true)
+    }
 }
 
 extension MovieForGenreViewController {
