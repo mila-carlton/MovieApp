@@ -42,8 +42,6 @@ final class DetailsViewController: UIViewController {
         
     }
     
-    
-    
     func getMovieDetails() {
         viewModel.fetchDetails {
             self.viewModel.fetchVideos {

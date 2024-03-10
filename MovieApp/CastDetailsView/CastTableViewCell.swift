@@ -120,6 +120,7 @@ final class CastTableViewCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        backgroundColor = .cellColor
         autoLayout()
     }
     
@@ -128,20 +129,20 @@ final class CastTableViewCell: UITableViewCell {
     }
     
     func configure(cast: CastDetailsModel) {
-        castImage.loadImage(imageURL: cast.profilePath ?? "")
-        castName.text = cast.name ?? ""
-        rangeLabel.text = cast.popularity?.rounding()
-        biographyLabel.text = cast.biography ?? ""
-        birthPlaceLabel.text = cast.placeOfBirth ?? ""
-        birthDateLabel.text = cast.birthday ?? ""
-        
-        if let deathday = cast.deathday {
-            deathDateLabel.text = deathday != "null" ? "\(deathday)" : "Alive"
-        }
-//            } else {
-//                deathDateLabel.text = "Alive"
-//            }
-        
+        DispatchQueue.main.async {
+            self.castImage.loadImage(imageURL: cast.profilePath ?? "")
+            self.castName.text = cast.name ?? ""
+            self.rangeLabel.text = cast.popularity?.rounding() ?? ""
+            self.biographyLabel.text = cast.biography ?? ""
+            self.birthPlaceLabel.text = cast.placeOfBirth ?? ""
+            self.birthDateLabel.text = cast.birthday ?? ""
+            
+            if let deathday = cast.deathday, deathday != "null" {
+                        self.deathDateLabel.text = deathday
+                    } else {
+                        self.deathDateLabel.text = "Alive"
+                    }
+                }
     }
     
     private func autoLayout() {

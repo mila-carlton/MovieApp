@@ -10,13 +10,14 @@ import Foundation
 final class CastDetailsViewModel {
     private var movieId: Int!
     
-    private(set) var castDetails: CastDetailsModel
+    private(set) var castDetails: CastDetailsModel?
     
     private let webService = WebService.shared
     
     init(movieId: Int) {
         self.movieId = movieId
     }
+    
     
     func fetchCastDetails(complete: @escaping (()->Void) ) {
         webService.fetchCastDetails(id: movieId) { [weak self] details in

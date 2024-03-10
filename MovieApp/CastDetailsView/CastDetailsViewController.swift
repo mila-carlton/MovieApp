@@ -37,6 +37,16 @@ final class CastDetailsViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .customBackgroundColor
         autoLayout()
+        getCastDetails()
+    }
+    
+    
+    func getCastDetails() {
+        viewModel.fetchCastDetails {
+            DispatchQueue.main.async {
+                self.castTableView.reloadData()
+            }
+        }
     }
     
     private func autoLayout() {
