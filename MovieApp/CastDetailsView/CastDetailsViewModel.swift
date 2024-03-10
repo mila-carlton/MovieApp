@@ -10,7 +10,7 @@ import Foundation
 final class CastDetailsViewModel {
     private var movieId: Int!
     
-    private(set) var castDetails: CastDetailsModel?
+    private(set) var castDetails: CastDetailsModel
     
     private let webService = WebService.shared
     

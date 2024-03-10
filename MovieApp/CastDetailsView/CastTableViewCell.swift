@@ -145,6 +145,59 @@ final class CastTableViewCell: UITableViewCell {
     }
     
     private func autoLayout() {
+        NSLayoutConstraint.activate([
+            castImage.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor, constant: 4),
+            castImage.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 4),
+            castImage.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -4),
+            castImage.heightAnchor.constraint(equalToConstant: 220),
+            
+            castName.topAnchor.constraint(equalTo: castImage.bottomAnchor, constant: 8),
+            castName.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 4),
+            castName.widthAnchor.constraint(equalToConstant: 80),
+            
+            starImage.topAnchor.constraint(equalTo: castImage.bottomAnchor, constant: 8),
+            starImage.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+            starImage.widthAnchor.constraint(equalToConstant: 15),
+            starImage.heightAnchor.constraint(equalToConstant: 15),
+            
+            rangeLabel.topAnchor.constraint(equalTo: castImage.bottomAnchor, constant: 8),
+            rangeLabel.leadingAnchor.constraint(equalTo: starImage.trailingAnchor, constant: 2),
+            rangeLabel.centerYAnchor.constraint(equalTo: starImage.centerYAnchor),
+            
+            biographyStaticLabel.topAnchor.constraint(equalTo: castName.bottomAnchor, constant: 12),
+            biographyStaticLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 4),
+            biographyStaticLabel.widthAnchor.constraint(equalToConstant: 70),
+            biographyStaticLabel.heightAnchor.constraint(equalToConstant: 20),
+            
+            biographyLabel.topAnchor.constraint(equalTo: biographyStaticLabel.bottomAnchor, constant: 4),
+            biographyLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 4),
+            biographyLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -4),
+            biographyLabel.heightAnchor.constraint(equalToConstant: 400),
+            
+            birthPlaceStaticLabel.topAnchor.constraint(equalTo: biographyLabel.bottomAnchor, constant: 4),
+            birthDateStaticLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 4),
+            birthPlaceStaticLabel.widthAnchor.constraint(equalToConstant: 40),
+            
+            birthPlaceLabel.topAnchor.constraint(equalTo: biographyLabel.bottomAnchor, constant: 4),
+            birthPlaceLabel.leadingAnchor.constraint(equalTo: birthPlaceStaticLabel.trailingAnchor, constant: 2),
+            birthPlaceLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -4),
+            
+            birthDateStaticLabel.topAnchor.constraint(equalTo: birthPlaceStaticLabel.bottomAnchor, constant: 4),
+            birthDateStaticLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 4),
+            birthDateStaticLabel.widthAnchor.constraint(equalToConstant: 40),
+            
+            birthDateLabel.topAnchor.constraint(equalTo: birthPlaceLabel.bottomAnchor, constant: 4),
+            birthDateLabel.leadingAnchor.constraint(equalTo: birthDateStaticLabel.trailingAnchor, constant: 2),
+            birthDateLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -4),
+            
+            deathDateStaticLabel.topAnchor.constraint(equalTo: birthDateStaticLabel.bottomAnchor, constant: 4),
+            deathDateStaticLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 4),
+            deathDateStaticLabel.widthAnchor.constraint(equalToConstant: 40),
+            
+            deathDateLabel.topAnchor.constraint(equalTo: birthDateLabel.bottomAnchor, constant: 4),
+            deathDateLabel.leadingAnchor.constraint(equalTo: deathDateStaticLabel.trailingAnchor, constant: 2),
+            deathDateLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -4)
         
+        ])
     }
 }

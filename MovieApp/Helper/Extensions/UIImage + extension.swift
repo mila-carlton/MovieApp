@@ -14,7 +14,7 @@ extension UIImageView {
             self.kf.indicatorType = .activity
             self.kf.setImage(with: url, placeholder: nil, options: [.transition(.fade(0.2))]) { result in
                 switch result {
-                case .success(let value):
+                case .success(_):
                     //print("Image loaded: \(value.source.url?.absoluteString ?? "")")
                     print("")
                 case .failure(let error):
