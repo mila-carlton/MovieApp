@@ -69,5 +69,11 @@ extension SeeAllCastsViewController: UICollectionViewDelegate, UICollectionViewD
         return cell
     }
     
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let castVM =  CastDetailsViewModel(movieId: casts[indexPath.item].id ?? 0)
+        let castVC = CastDetailsViewController(viewModel: castVM)
+        self.navigationController?.pushViewController(castVC, animated: true)
+    }
+    
     
 }

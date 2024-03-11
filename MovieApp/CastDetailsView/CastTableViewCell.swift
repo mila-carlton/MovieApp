@@ -33,6 +33,7 @@ final class CastTableViewCell: UITableViewCell {
          image.image = UIImage(systemName: "star.fill")
          image.tintColor = .yellow
          image.contentMode = .scaleToFill
+         starImage.translatesAutoresizingMaskIntoConstraints = false
          addSubview(image)
          return image
      }()
@@ -41,6 +42,7 @@ final class CastTableViewCell: UITableViewCell {
         let label = UILabel()
         label.numberOfLines = 1
         label.font = .systemFont(ofSize: 13, weight: .semibold)
+        rangeLabel.translatesAutoresizingMaskIntoConstraints = false
         addSubview(label)
         return label
     }()
@@ -51,6 +53,7 @@ final class CastTableViewCell: UITableViewCell {
         label.font = .systemFont(ofSize: 14, weight: .medium)
         label.text = "Biography"
         label.textColor = .lightGray
+        biographyStaticLabel.translatesAutoresizingMaskIntoConstraints = false
         addSubview(label)
         return label
     }()
@@ -59,6 +62,7 @@ final class CastTableViewCell: UITableViewCell {
         let label = UILabel()
         label.numberOfLines = 0
         label.font = .systemFont(ofSize: 13, weight: .semibold)
+        biographyLabel.translatesAutoresizingMaskIntoConstraints = false
         addSubview(label)
         return label
     }()
@@ -69,6 +73,7 @@ final class CastTableViewCell: UITableViewCell {
         label.font = .systemFont(ofSize: 14, weight: .medium)
         label.text = "Place of birth:"
         label.textColor = .lightGray
+        birthPlaceStaticLabel.translatesAutoresizingMaskIntoConstraints = false
         addSubview(label)
         return label
     }()
@@ -77,6 +82,7 @@ final class CastTableViewCell: UITableViewCell {
         let label = UILabel()
         label.numberOfLines = 0
         label.font = .systemFont(ofSize: 13, weight: .semibold)
+        birthPlaceLabel.translatesAutoresizingMaskIntoConstraints = false
         addSubview(label)
         return label
     }()
@@ -95,6 +101,7 @@ final class CastTableViewCell: UITableViewCell {
         let label = UILabel()
         label.numberOfLines = 1
         label.font = .systemFont(ofSize: 13, weight: .semibold)
+        birthDateStaticLabel.translatesAutoresizingMaskIntoConstraints = false
         addSubview(label)
         return label
     }()
@@ -105,6 +112,7 @@ final class CastTableViewCell: UITableViewCell {
         label.font = .systemFont(ofSize: 14, weight: .medium)
         label.text = "Death date:"
         label.textColor = .lightGray
+        deathDateStaticLabel.translatesAutoresizingMaskIntoConstraints = false
         addSubview(label)
         return label
     }()
@@ -113,6 +121,7 @@ final class CastTableViewCell: UITableViewCell {
         let label = UILabel()
         label.numberOfLines = 1
         label.font = .systemFont(ofSize: 13, weight: .semibold)
+        deathDateLabel.translatesAutoresizingMaskIntoConstraints = false
         addSubview(label)
         return label
     }()
@@ -120,13 +129,14 @@ final class CastTableViewCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        backgroundColor = .cellColor
+        backgroundColor = .clear
         autoLayout()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
     
     func configure(cast: CastDetailsModel) {
         DispatchQueue.main.async {
@@ -147,7 +157,8 @@ final class CastTableViewCell: UITableViewCell {
     
     private func autoLayout() {
         NSLayoutConstraint.activate([
-            castImage.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor, constant: 4),
+            
+            castImage.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor, constant: 8),
             castImage.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 4),
             castImage.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -4),
             castImage.heightAnchor.constraint(equalToConstant: 220),
@@ -155,6 +166,7 @@ final class CastTableViewCell: UITableViewCell {
             castName.topAnchor.constraint(equalTo: castImage.bottomAnchor, constant: 8),
             castName.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 4),
             castName.widthAnchor.constraint(equalToConstant: 80),
+            castName.heightAnchor.constraint(equalToConstant: 16),
             
             starImage.topAnchor.constraint(equalTo: castImage.bottomAnchor, constant: 8),
             starImage.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),

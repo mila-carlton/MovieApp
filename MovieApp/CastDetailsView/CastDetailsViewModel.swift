@@ -10,9 +10,15 @@ import Foundation
 final class CastDetailsViewModel {
     private var movieId: Int!
     
-    private(set) var castDetails: CastDetailsModel?
+    private(set) var castDetails: CastDetailsModel! {
+        didSet {
+            self.didUpdate?()
+        }
+    }
     
     private let webService = WebService.shared
+    
+    var didUpdate: (() -> Void)?
     
     init(movieId: Int) {
         self.movieId = movieId

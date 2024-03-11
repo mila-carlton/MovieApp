@@ -37,17 +37,24 @@ final class CastDetailsViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .customBackgroundColor
         autoLayout()
+        viewModel.didUpdate = {
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                self.castTableView.reloadData()
+            }
+        }
         getCastDetails()
     }
     
-    
     func getCastDetails() {
         viewModel.fetchCastDetails {
-            DispatchQueue.main.async {
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
                 self.castTableView.reloadData()
             }
         }
     }
+    
     
     private func autoLayout() {
         NSLayoutConstraint.activate([
@@ -68,7 +75,11 @@ extension CastDetailsViewController: UITableViewDelegate, UITableViewDataSource 
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: CastTableViewCell.id, for: indexPath) as! CastTableViewCell
-        cell.configure(cast: viewModel.castDetails)
+        if let castDetails = viewModel.castDetails {
+                cell.configure(cast: castDetails)
+            } else {
+                print("error")
+            }
         return cell
     }
     
