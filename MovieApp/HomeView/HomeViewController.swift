@@ -18,7 +18,7 @@ final class HomeViewController: UIViewController {
         
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.backgroundColor = .black
+        tableView.backgroundColor = .customBackgroundColor
         view.addSubview(tableView)
         tableView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([

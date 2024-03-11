@@ -7,6 +7,10 @@
 
 import UIKit
 
+protocol CastSelectableDelegate {
+    func castSelected(with id: Int)
+}
+
 final class CastTableViewCell: UITableViewCell {
     
     static let id = "\(CastTableViewCell.self)"
@@ -33,7 +37,7 @@ final class CastTableViewCell: UITableViewCell {
          image.image = UIImage(systemName: "star.fill")
          image.tintColor = .yellow
          image.contentMode = .scaleToFill
-         starImage.translatesAutoresizingMaskIntoConstraints = false
+         image.translatesAutoresizingMaskIntoConstraints = false
          addSubview(image)
          return image
      }()
@@ -42,7 +46,7 @@ final class CastTableViewCell: UITableViewCell {
         let label = UILabel()
         label.numberOfLines = 1
         label.font = .systemFont(ofSize: 13, weight: .semibold)
-        rangeLabel.translatesAutoresizingMaskIntoConstraints = false
+        label.translatesAutoresizingMaskIntoConstraints = false
         addSubview(label)
         return label
     }()
@@ -53,7 +57,7 @@ final class CastTableViewCell: UITableViewCell {
         label.font = .systemFont(ofSize: 14, weight: .medium)
         label.text = "Biography"
         label.textColor = .lightGray
-        biographyStaticLabel.translatesAutoresizingMaskIntoConstraints = false
+        label.translatesAutoresizingMaskIntoConstraints = false
         addSubview(label)
         return label
     }()
@@ -62,7 +66,7 @@ final class CastTableViewCell: UITableViewCell {
         let label = UILabel()
         label.numberOfLines = 0
         label.font = .systemFont(ofSize: 13, weight: .semibold)
-        biographyLabel.translatesAutoresizingMaskIntoConstraints = false
+        label.translatesAutoresizingMaskIntoConstraints = false
         addSubview(label)
         return label
     }()
@@ -70,10 +74,10 @@ final class CastTableViewCell: UITableViewCell {
     private lazy var birthPlaceStaticLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 1
-        label.font = .systemFont(ofSize: 14, weight: .medium)
+        label.font = .systemFont(ofSize: 13, weight: .medium)
         label.text = "Place of birth:"
         label.textColor = .lightGray
-        birthPlaceStaticLabel.translatesAutoresizingMaskIntoConstraints = false
+        label.translatesAutoresizingMaskIntoConstraints = false
         addSubview(label)
         return label
     }()
@@ -82,7 +86,7 @@ final class CastTableViewCell: UITableViewCell {
         let label = UILabel()
         label.numberOfLines = 0
         label.font = .systemFont(ofSize: 13, weight: .semibold)
-        birthPlaceLabel.translatesAutoresizingMaskIntoConstraints = false
+        label.translatesAutoresizingMaskIntoConstraints = false
         addSubview(label)
         return label
     }()
@@ -90,9 +94,10 @@ final class CastTableViewCell: UITableViewCell {
     private lazy var birthDateStaticLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 1
-        label.font = .systemFont(ofSize: 14, weight: .medium)
+        label.font = .systemFont(ofSize: 13, weight: .medium)
         label.text = "Birth date:"
         label.textColor = .lightGray
+        label.translatesAutoresizingMaskIntoConstraints = false
         addSubview(label)
         return label
     }()
@@ -101,7 +106,7 @@ final class CastTableViewCell: UITableViewCell {
         let label = UILabel()
         label.numberOfLines = 1
         label.font = .systemFont(ofSize: 13, weight: .semibold)
-        birthDateStaticLabel.translatesAutoresizingMaskIntoConstraints = false
+        label.translatesAutoresizingMaskIntoConstraints = false
         addSubview(label)
         return label
     }()
@@ -109,10 +114,10 @@ final class CastTableViewCell: UITableViewCell {
     private lazy var deathDateStaticLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 1
-        label.font = .systemFont(ofSize: 14, weight: .medium)
+        label.font = .systemFont(ofSize: 13, weight: .medium)
         label.text = "Death date:"
         label.textColor = .lightGray
-        deathDateStaticLabel.translatesAutoresizingMaskIntoConstraints = false
+        label.translatesAutoresizingMaskIntoConstraints = false
         addSubview(label)
         return label
     }()
@@ -121,11 +126,13 @@ final class CastTableViewCell: UITableViewCell {
         let label = UILabel()
         label.numberOfLines = 1
         label.font = .systemFont(ofSize: 13, weight: .semibold)
-        deathDateLabel.translatesAutoresizingMaskIntoConstraints = false
+        label.translatesAutoresizingMaskIntoConstraints = false
         addSubview(label)
         return label
     }()
     
+    var selectedCastDelegate: CastSelectableDelegate?
+    var casts: [Cast] = []
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -142,10 +149,10 @@ final class CastTableViewCell: UITableViewCell {
         DispatchQueue.main.async {
             self.castImage.loadImage(imageURL: cast.profilePath ?? "")
             self.castName.text = cast.name ?? ""
-            self.rangeLabel.text = cast.popularity?.rounding() ?? ""
-            self.biographyLabel.text = cast.biography ?? ""
-            self.birthPlaceLabel.text = cast.placeOfBirth ?? ""
-            self.birthDateLabel.text = cast.birthday ?? ""
+            self.rangeLabel.text = cast.popularity?.rounding() ?? "0.00"
+            self.biographyLabel.text = cast.biography ?? "No information"
+            self.birthPlaceLabel.text = cast.placeOfBirth ?? "No information"
+            self.birthDateLabel.text = cast.birthday ?? "No information"
             
             if let deathday = cast.deathday, deathday != "null" {
                         self.deathDateLabel.text = deathday
@@ -159,57 +166,56 @@ final class CastTableViewCell: UITableViewCell {
         NSLayoutConstraint.activate([
             
             castImage.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor, constant: 8),
-            castImage.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 4),
-            castImage.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -4),
-            castImage.heightAnchor.constraint(equalToConstant: 220),
+            castImage.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 8),
+            castImage.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8),
+            castImage.heightAnchor.constraint(equalToConstant: 260),
             
-            castName.topAnchor.constraint(equalTo: castImage.bottomAnchor, constant: 8),
-            castName.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 4),
-            castName.widthAnchor.constraint(equalToConstant: 80),
+            castName.topAnchor.constraint(equalTo: castImage.bottomAnchor, constant: 12),
+            castName.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 8),
+            castName.widthAnchor.constraint(equalToConstant: 200),
             castName.heightAnchor.constraint(equalToConstant: 16),
             
-            starImage.topAnchor.constraint(equalTo: castImage.bottomAnchor, constant: 8),
-            starImage.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+            starImage.topAnchor.constraint(equalTo: castImage.bottomAnchor, constant: 12),
+            starImage.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -48),
             starImage.widthAnchor.constraint(equalToConstant: 15),
             starImage.heightAnchor.constraint(equalToConstant: 15),
             
-            rangeLabel.topAnchor.constraint(equalTo: castImage.bottomAnchor, constant: 8),
-            rangeLabel.leadingAnchor.constraint(equalTo: starImage.trailingAnchor, constant: 2),
+            rangeLabel.topAnchor.constraint(equalTo: castImage.bottomAnchor, constant: 12),
+            rangeLabel.leadingAnchor.constraint(equalTo: starImage.trailingAnchor, constant: 4),
             rangeLabel.centerYAnchor.constraint(equalTo: starImage.centerYAnchor),
             
             biographyStaticLabel.topAnchor.constraint(equalTo: castName.bottomAnchor, constant: 12),
-            biographyStaticLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 4),
+            biographyStaticLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 8),
             biographyStaticLabel.widthAnchor.constraint(equalToConstant: 70),
             biographyStaticLabel.heightAnchor.constraint(equalToConstant: 20),
             
             biographyLabel.topAnchor.constraint(equalTo: biographyStaticLabel.bottomAnchor, constant: 4),
-            biographyLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 4),
-            biographyLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -4),
-            biographyLabel.heightAnchor.constraint(equalToConstant: 400),
+            biographyLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 8),
+            biographyLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8),
             
-            birthPlaceStaticLabel.topAnchor.constraint(equalTo: biographyLabel.bottomAnchor, constant: 4),
-            birthDateStaticLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 4),
-            birthPlaceStaticLabel.widthAnchor.constraint(equalToConstant: 40),
+            birthPlaceStaticLabel.topAnchor.constraint(equalTo: biographyLabel.bottomAnchor, constant: 8),
+            birthDateStaticLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 8),
             
-            birthPlaceLabel.topAnchor.constraint(equalTo: biographyLabel.bottomAnchor, constant: 4),
+            birthPlaceLabel.topAnchor.constraint(equalTo: biographyLabel.bottomAnchor, constant: 8),
             birthPlaceLabel.leadingAnchor.constraint(equalTo: birthPlaceStaticLabel.trailingAnchor, constant: 2),
-            birthPlaceLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -4),
+            
             
             birthDateStaticLabel.topAnchor.constraint(equalTo: birthPlaceStaticLabel.bottomAnchor, constant: 4),
-            birthDateStaticLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 4),
-            birthDateStaticLabel.widthAnchor.constraint(equalToConstant: 40),
+            birthDateStaticLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 8),
+            birthDateStaticLabel.widthAnchor.constraint(equalToConstant: 80),
             
-            birthDateLabel.topAnchor.constraint(equalTo: birthPlaceLabel.bottomAnchor, constant: 4),
+            birthDateLabel.topAnchor.constraint(equalTo: birthPlaceStaticLabel.bottomAnchor, constant: 4),
             birthDateLabel.leadingAnchor.constraint(equalTo: birthDateStaticLabel.trailingAnchor, constant: 2),
-            birthDateLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -4),
+            birthDateLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8),
             
             deathDateStaticLabel.topAnchor.constraint(equalTo: birthDateStaticLabel.bottomAnchor, constant: 4),
-            deathDateStaticLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 4),
-            deathDateStaticLabel.widthAnchor.constraint(equalToConstant: 40),
+            deathDateStaticLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 8),
+            deathDateStaticLabel.widthAnchor.constraint(equalToConstant: 80),
+            deathDateStaticLabel.heightAnchor.constraint(equalToConstant: 12),
             
             deathDateLabel.topAnchor.constraint(equalTo: birthDateLabel.bottomAnchor, constant: 4),
             deathDateLabel.leadingAnchor.constraint(equalTo: deathDateStaticLabel.trailingAnchor, constant: 2),
-            deathDateLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -4)
+            deathDateLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8)
         
         ])
     }
