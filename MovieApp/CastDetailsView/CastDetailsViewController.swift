@@ -20,18 +20,23 @@ final class CastDetailsViewController: UIViewController {
         view.addSubview(tableView)
         return tableView
     }()
+
     
     var viewModel: CastDetailsViewModel
+    var movieName: String
     
-    init(viewModel: CastDetailsViewModel) {
+    init(viewModel: CastDetailsViewModel, movieName: String) {
         self.viewModel = viewModel
+        self.movieName = movieName
         super.init(nibName: nil, bundle: nil)
+        self.title = movieName
         
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,6 +49,7 @@ final class CastDetailsViewController: UIViewController {
             }
         }
         getCastDetails()
+        getFilmography()
     }
     
     func getCastDetails() {
@@ -55,6 +61,14 @@ final class CastDetailsViewController: UIViewController {
         }
     }
     
+    func getFilmography() {
+        viewModel.fetchFilmography {
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                self.castTableView.reloadData()
+            }
+        }
+    }
     
     private func autoLayout() {
         NSLayoutConstraint.activate([
@@ -76,10 +90,10 @@ extension CastDetailsViewController: UITableViewDelegate, UITableViewDataSource 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: CastTableViewCell.id, for: indexPath) as! CastTableViewCell
         if let castDetails = viewModel.castDetails {
-                cell.configure(cast: castDetails)
-            } else {
-                print("error")
-            }
+            cell.configure(cast: castDetails, filmographyMovies: viewModel.filmographyMovies ?? [])
+        } else {
+            print("error")
+        }
         return cell
     }
     

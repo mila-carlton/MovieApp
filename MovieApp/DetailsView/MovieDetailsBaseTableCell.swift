@@ -7,6 +7,14 @@
 
 import UIKit
 
+protocol CastSelectableDelegate {
+    func castSelected(with id: Int)
+}
+
+protocol SimilarSelectableDelegate {
+    func similarSelected(with id: Int)
+}
+
 final class MovieDetailsBaseTableCell: UITableViewCell {
     
     static let id = "\(MovieDetailsBaseTableCell.self)"
@@ -157,6 +165,9 @@ final class MovieDetailsBaseTableCell: UITableViewCell {
     
     var seeAllCastButtonTapHandler: (()->Void)?
     var seeAllSimilarButtonTapHandler: (()->Void)?
+    
+    var selectedCastDelegate: CastSelectableDelegate?
+    var selectedSimilarDelegate: SimilarSelectableDelegate?
 
     func configure(videoResults: [VideoResult], movieDetails: MovieDetailsModel?, movieCasts: [Cast], similarMovies: [MovieListResult]) {
         
@@ -204,7 +215,7 @@ final class MovieDetailsBaseTableCell: UITableViewCell {
             castsCollectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -4),
             castsCollectionView.heightAnchor.constraint(equalToConstant: 220),
             
-            similarLabel.topAnchor.constraint(equalTo: castsCollectionView.bottomAnchor, constant: 12),
+            similarLabel.topAnchor.constraint(equalTo: castsCollectionView.bottomAnchor, constant: 14),
             similarLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 4),
             similarLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -4),
             similarLabel.heightAnchor.constraint(equalToConstant: 20),
@@ -254,6 +265,14 @@ extension MovieDetailsBaseTableCell: UICollectionViewDelegate, UICollectionViewD
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MovieCollectionViewCell.id, for: indexPath) as! MovieCollectionViewCell
             cell.configure(movieItem: similarMovies[indexPath.item])
             return cell
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if collectionView == castsCollectionView {
+            selectedCastDelegate?.castSelected(with: casts[indexPath.item].id ?? 0)
+        } else if collectionView == similarMoviesCollectionView {
+            selectedSimilarDelegate?.similarSelected(with: similarMovies[indexPath.item].id ?? 0)
         }
     }
     

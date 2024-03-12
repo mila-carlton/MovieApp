@@ -31,9 +31,13 @@ final class SeeAllCastsViewController: UIViewController {
         return collectionView
     }()
     
-    init(casts: [Cast]) {
+    var movieName: String
+    
+    init(casts: [Cast], movieName: String) {
         self.casts = casts
+        self.movieName = movieName
         super.init(nibName: nil, bundle: nil)
+        self.title = movieName + " Casts"
     }
     
     required init?(coder: NSCoder) {
@@ -71,7 +75,7 @@ extension SeeAllCastsViewController: UICollectionViewDelegate, UICollectionViewD
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let castVM =  CastDetailsViewModel(movieId: casts[indexPath.item].id ?? 0)
-        let castVC = CastDetailsViewController(viewModel: castVM)
+        let castVC = CastDetailsViewController(viewModel: castVM, movieName: self.movieName)
         self.navigationController?.pushViewController(castVC, animated: true)
     }
     

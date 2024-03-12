@@ -119,11 +119,14 @@ extension DetailsViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: MovieDetailsBaseTableCell.id, for: indexPath) as! MovieDetailsBaseTableCell
         
+        cell.selectedCastDelegate = self
+        cell.selectedSimilarDelegate = self
+        
         cell.configure(videoResults: viewModel.videoResults, movieDetails: viewModel.movieDetails, movieCasts: viewModel.movieCastResults, similarMovies: viewModel.similarMovies)
         
         cell.seeAllCastButtonTapHandler = { [weak self] in
             guard let self = self else { return }
-            let allVC = SeeAllCastsViewController(casts: self.viewModel.movieCastResults)
+            let allVC = SeeAllCastsViewController(casts: self.viewModel.movieCastResults, movieName: viewModel.movieDetails?.title ?? "")
             navigationController?.pushViewController(allVC, animated: true)
             
         }
@@ -144,4 +147,23 @@ extension DetailsViewController: UITableViewDelegate, UITableViewDataSource {
     }
 }
 
-
+extension DetailsViewController: CastSelectableDelegate {
+    
+    func castSelected(with id: Int) {
+        let castVM =  CastDetailsViewModel(movieId: id)
+        let castVC = CastDetailsViewController(viewModel: castVM, movieName: viewModel.movieDetails?.title ?? "")
+        self.navigationController?.pushViewController(castVC, animated: true)
+    }
+    
+    
+}
+extension DetailsViewController: SimilarSelectableDelegate {
+    
+    func similarSelected(with id: Int) {
+        let similarVM = DetailsViewModel(movieId: id)
+        let similarVC = DetailsViewController(viewModel: similarVM)
+        self.navigationController?.pushViewController(similarVC, animated: true)
+    }
+    
+    
+}

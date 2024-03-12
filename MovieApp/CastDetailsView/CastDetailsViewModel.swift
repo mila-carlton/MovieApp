@@ -8,7 +8,7 @@
 import Foundation
 
 final class CastDetailsViewModel {
-    private var movieId: Int!
+    private var castId: Int!
     
     private(set) var castDetails: CastDetailsModel! {
         didSet {
@@ -16,17 +16,19 @@ final class CastDetailsViewModel {
         }
     }
     
+    private(set) var filmographyMovies: [FilmographyCast]?
+    
     private let webService = WebService.shared
     
     var didUpdate: (() -> Void)?
     
     init(movieId: Int) {
-        self.movieId = movieId
+        self.castId = movieId
     }
     
     
     func fetchCastDetails(complete: @escaping (()->Void) ) {
-        webService.fetchCastDetails(id: movieId) { [weak self] details in
+        webService.fetchCastDetails(id: castId) { [weak self] details in
             guard let self = self, let castDetails = details else {
                 complete()
                 return }
@@ -34,4 +36,15 @@ final class CastDetailsViewModel {
             complete()
         }
     }
+    
+    func fetchFilmography(completion: @escaping(() -> Void) ) {
+        webService.fetchFilmography(id: castId) { [weak self] films in
+            guard let self = self, let filmsAll = films else {  completion()
+                return }
+            self.filmographyMovies = filmsAll
+            completion()
+        }
+    }
 }
+
+

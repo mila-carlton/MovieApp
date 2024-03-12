@@ -50,6 +50,7 @@ final class MoviesTableViewCell: UITableViewCell, UICollectionViewDelegate, UICo
     
     var seeAllMovieesDelegate: AllMovieSeeDelegate?
     var selectedMovieDelegate: MovieSelectableDelegate?
+    
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)

@@ -45,6 +45,7 @@ final class SeeAllSimilarViewController: UIViewController {
         setupLayouts()
         
     }
+    
     func setupLayouts() {
                 
         NSLayoutConstraint.activate([
@@ -65,6 +66,7 @@ extension SeeAllSimilarViewController: UICollectionViewDelegate, UICollectionVie
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MovieCollectionViewCell.id, for: indexPath) as! MovieCollectionViewCell
+        
         cell.configure(similar: similar[indexPath.item])
         return cell
     }
@@ -79,3 +81,4 @@ extension SeeAllSimilarViewController: UICollectionViewDelegate, UICollectionVie
     }
     
 }
+    

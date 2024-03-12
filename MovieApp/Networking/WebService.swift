@@ -150,4 +150,16 @@ final class WebService {
             }
         }
     }
+    
+    func fetchFilmography(id: Int, completion: @escaping(([FilmographyCast]?) -> Void)) {
+        let url = URL(string: "https://api.themoviedb.org/3/person/\(id)/movie_credits?language=en-US")!
+        NetworkRequest.shared.requestAPI(type: FilmographyModel.self, url: url.absoluteString) { result in
+            switch result {
+            case .success(let filmographyResponse):
+                completion(filmographyResponse.cast)
+            case .failure(_):
+                completion(nil)
+            }
+        }
+    }
 }
