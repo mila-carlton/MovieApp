@@ -89,8 +89,18 @@ extension CastDetailsViewController: UITableViewDelegate, UITableViewDataSource 
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: CastTableViewCell.id, for: indexPath) as! CastTableViewCell
+        
+        cell.selectedFilmDelegate = self
+        
         if let castDetails = viewModel.castDetails {
             cell.configure(cast: castDetails, filmographyMovies: viewModel.filmographyMovies ?? [])
+            
+            cell.seeAllFilmographyButtonTapHandler = { [weak self] in
+                guard let self = self else { return }
+                let allFC = SeeAllFilmographyViewController(filmography: self.viewModel.filmographyMovies ?? [])
+                navigationController?.pushViewController(allFC, animated: true)
+            }
+            
         } else {
             print("error")
         }
@@ -100,4 +110,14 @@ extension CastDetailsViewController: UITableViewDelegate, UITableViewDataSource 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         UITableView.automaticDimension
     }
+}
+
+extension CastDetailsViewController: FilmSelectableDelegate {
+    func filmSelected(with id: Int) {
+        let filmVM = DetailsViewModel(movieId: id)
+        let filmVC = DetailsViewController(viewModel: filmVM)
+        self.navigationController?.pushViewController(filmVC, animated: true)
+    }
+    
+    
 }

@@ -37,6 +37,10 @@ final class MovieCollectionViewCell: UICollectionViewCell {
         movieImage.loadImage(imageURL: similar.posterPath ?? "")
     }
     
+    func configure(filmography: FilmographyCast) {
+        movieImage.loadImage(imageURL: filmography.posterPath ?? "")
+    }
+    
     private func setupImage() {
         movieImage.contentMode = .scaleToFill
         addSubview(movieImage)

@@ -77,6 +77,15 @@ final class SearchViewController: UIViewController, UISearchBarDelegate, UISearc
             cell.configure(searchMovie: movie)
             return cell
         }
+        
+        func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+            
+            let detailsVM = DetailsViewModel(movieId: viewModel.movies[indexPath.item].id ?? 0)
+            
+            let detailsVc = DetailsViewController(viewModel: detailsVM)
+            
+            self.navigationController?.pushViewController(detailsVc, animated: true)
+        }
     }
 
 extension SearchViewController {

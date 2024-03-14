@@ -26,7 +26,6 @@ final class MainTabBarController: UITabBarController {
     }
     
     private func generateVC(viewController: UIViewController, title: String, image: UIImage) -> UINavigationController {
-        
         viewController.tabBarItem.title = title
         viewController.tabBarItem.image = image
         let nav = UINavigationController(rootViewController: viewController)

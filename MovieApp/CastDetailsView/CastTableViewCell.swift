@@ -7,6 +7,10 @@
 
 import UIKit
 
+protocol FilmSelectableDelegate {
+    func filmSelected(with id: Int)
+}
+
 final class CastTableViewCell: UITableViewCell {
     
     static let id = "\(CastTableViewCell.self)"
@@ -32,7 +36,6 @@ final class CastTableViewCell: UITableViewCell {
          image.tintColor = .yellow
          image.contentMode = .scaleToFill
          image.translatesAutoresizingMaskIntoConstraints = false
-//         contentView.addSubview(image)
          return image
      }()
     
@@ -41,7 +44,6 @@ final class CastTableViewCell: UITableViewCell {
         label.numberOfLines = 1
         label.font = .systemFont(ofSize: 14, weight: .semibold)
         label.translatesAutoresizingMaskIntoConstraints = false
-//        contentView.addSubview(label)
         return label
     }()
     
@@ -52,7 +54,6 @@ final class CastTableViewCell: UITableViewCell {
         label.text = "Biography"
         label.textColor = .lightGray
         label.translatesAutoresizingMaskIntoConstraints = false
-//        contentView.addSubview(label)
         return label
     }()
     
@@ -61,7 +62,6 @@ final class CastTableViewCell: UITableViewCell {
         label.numberOfLines = 0
         label.font = .systemFont(ofSize: 13, weight: .semibold)
         label.translatesAutoresizingMaskIntoConstraints = false
-//        contentView.addSubview(label)
         return label
     }()
     
@@ -72,7 +72,6 @@ final class CastTableViewCell: UITableViewCell {
         label.text = "Place of birth:"
         label.textColor = .lightGray
         label.translatesAutoresizingMaskIntoConstraints = false
-//        contentView.addSubview(label)
         return label
     }()
     
@@ -81,7 +80,6 @@ final class CastTableViewCell: UITableViewCell {
         label.numberOfLines = 0
         label.font = .systemFont(ofSize: 13, weight: .semibold)
         label.translatesAutoresizingMaskIntoConstraints = false
-//        contentView.addSubview(label)
         return label
     }()
     
@@ -92,7 +90,6 @@ final class CastTableViewCell: UITableViewCell {
         label.text = "Birth date:"
         label.textColor = .lightGray
         label.translatesAutoresizingMaskIntoConstraints = false
-//        contentView.addSubview(label)
         return label
     }()
     
@@ -101,7 +98,6 @@ final class CastTableViewCell: UITableViewCell {
         label.numberOfLines = 1
         label.font = .systemFont(ofSize: 13, weight: .semibold)
         label.translatesAutoresizingMaskIntoConstraints = false
-//        contentView.addSubview(label)
         return label
     }()
     
@@ -112,7 +108,6 @@ final class CastTableViewCell: UITableViewCell {
         label.text = "Death date:"
         label.textColor = .lightGray
         label.translatesAutoresizingMaskIntoConstraints = false
-//        contentView.addSubview(label)
         return label
     }()
   
@@ -134,9 +129,21 @@ final class CastTableViewCell: UITableViewCell {
         return label
     }()
     
+    private lazy var seeAllFilmographyButton: UIButton = {
+       let button = UIButton()
+        button.setTitle("See all", for: .normal)
+        button.setTitleColor(.red, for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 15, weight: .medium)
+        button.backgroundColor = .clear
+        button.addTarget(self, action: #selector(seeAllFilmographyButtonPressed), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+
+    
     private lazy var filmographyCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
-        layout.itemSize = .init(width: ((contentView.frame.width/2.5) - 18), height: 220)
+        layout.itemSize = .init(width: ((contentView.frame.width/2.5) - 14), height: 220)
         layout.scrollDirection = .horizontal
         layout.minimumInteritemSpacing = 8
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -146,9 +153,11 @@ final class CastTableViewCell: UITableViewCell {
         collectionView.delegate = self
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.backgroundColor = .red
         return collectionView
     }()
+    
+    var seeAllFilmographyButtonTapHandler: (()->Void)?
+    var selectedFilmDelegate: FilmSelectableDelegate?
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -167,6 +176,11 @@ final class CastTableViewCell: UITableViewCell {
     }
     
     var filmographyMovies: [FilmographyCast] = []
+    
+    @objc
+    private func seeAllFilmographyButtonPressed() {
+        seeAllFilmographyButtonTapHandler?()
+    }
     
     func configure(cast: CastDetailsModel, filmographyMovies: [FilmographyCast]) {
         
@@ -204,6 +218,7 @@ final class CastTableViewCell: UITableViewCell {
         contentView.addSubview(deathDateStaticLabel)
         contentView.addSubview(deathDateLabel)
         contentView.addSubview(filmographyStaticLabel)
+        contentView.addSubview(seeAllFilmographyButton)
         contentView.addSubview(filmographyCollectionView)
         
         autoLayout()
@@ -214,9 +229,9 @@ final class CastTableViewCell: UITableViewCell {
         NSLayoutConstraint.activate([
             
             castImage.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor),
-            castImage.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 8),
-            castImage.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8),
-            castImage.heightAnchor.constraint(equalToConstant: 280),
+            castImage.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 40),
+            castImage.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -40),
+            castImage.heightAnchor.constraint(equalToConstant: 290),
             
           
             rangeLabel.topAnchor.constraint(equalTo: castImage.bottomAnchor, constant: 17),
@@ -273,7 +288,11 @@ final class CastTableViewCell: UITableViewCell {
             filmographyStaticLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 8),
             filmographyStaticLabel.widthAnchor.constraint(equalToConstant: 150),
             
-            filmographyCollectionView.topAnchor.constraint(equalTo: filmographyStaticLabel.bottomAnchor, constant: 4),
+            seeAllFilmographyButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8),
+            seeAllFilmographyButton.centerYAnchor.constraint(equalTo: filmographyStaticLabel.centerYAnchor),
+            seeAllFilmographyButton.widthAnchor.constraint(equalToConstant: 80),
+            
+            filmographyCollectionView.topAnchor.constraint(equalTo: filmographyStaticLabel.bottomAnchor),
             filmographyCollectionView.heightAnchor.constraint(equalToConstant: 220),
             filmographyCollectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 8),
             filmographyCollectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: 8),
@@ -293,6 +312,10 @@ extension CastTableViewCell: UICollectionViewDelegate, UICollectionViewDataSourc
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: FilmographyViewCell.id, for: indexPath) as! FilmographyViewCell
         cell.configure(film: filmographyMovies[indexPath.item])
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        selectedFilmDelegate?.filmSelected(with: filmographyMovies[indexPath.item].id ?? 0)
     }
     
     
