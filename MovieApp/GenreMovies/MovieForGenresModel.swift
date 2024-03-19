@@ -59,3 +59,9 @@ struct DiscoverResult: Codable {
     }
 }
 
+extension DiscoverResult: MovieItemProtocol {
+    var imagePath: String {
+        return posterPath ?? ""
+    }
+}
+

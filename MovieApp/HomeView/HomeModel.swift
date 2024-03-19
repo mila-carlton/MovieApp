@@ -7,7 +7,10 @@
 
 import Foundation
 
-// MARK: - MovieList
+protocol MovieItemProtocol {
+    var imagePath: String { get }
+}
+
 struct MovieList: Codable {
     let dates: Dates?
     let page: Int?
@@ -21,13 +24,12 @@ struct MovieList: Codable {
     }
 }
 
-// MARK: - Dates
 struct Dates: Codable {
     let maximum, minimum: String?
 }
 
-// MARK: - NowPlayingListResult
 struct MovieListResult: Codable {
+    
     let adult: Bool?
     let backdropPath: String?
     let genreIDS: [Int]?
@@ -53,12 +55,15 @@ struct MovieListResult: Codable {
         case voteAverage = "vote_average"
         case voteCount = "vote_count"
     }
+    
+  
 }
 
 
-extension MovieListResult {
-    var posterAbsolutlyString: String {
-        return ""
+extension MovieListResult: MovieItemProtocol {
+    var imagePath: String {
+        return posterPath ?? ""
     }
+
 }
 

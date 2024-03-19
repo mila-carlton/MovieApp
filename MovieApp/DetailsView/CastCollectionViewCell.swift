@@ -22,8 +22,8 @@ final class CastCollectionViewCell: UICollectionViewCell {
     
     private lazy var nameLabel: UILabel = {
        let label = UILabel()
-        label.font = .systemFont(ofSize: 12)
-        label.numberOfLines = 0
+        label.font = .systemFont(ofSize: 13, weight: .medium)
+        label.numberOfLines = 1
         label.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(label)
         return label
@@ -31,8 +31,8 @@ final class CastCollectionViewCell: UICollectionViewCell {
     
     private lazy var roleLabel: UILabel = {
        let label = UILabel()
-        label.font = .systemFont(ofSize: 12)
-        label.numberOfLines = 0
+        label.font = .systemFont(ofSize: 13, weight: .medium)
+        label.numberOfLines = 1
         label.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(label)
         return label
@@ -56,6 +56,8 @@ final class CastCollectionViewCell: UICollectionViewCell {
     
     
     private func autoLayout() {
+        castImageView.layer.masksToBounds = true
+        castImageView.layer.cornerRadius = 5
         
         NSLayoutConstraint.activate([
             castImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 4),

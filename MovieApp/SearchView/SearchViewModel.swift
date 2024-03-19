@@ -18,6 +18,7 @@ final class SearchViewModel {
         webService.fetchSearch(query: query) { [weak self] results in
             guard let self = self else { return }
             if let searchResult = results {
+                self.movies.removeAll()
                 self.movies = searchResult
                 completion()
             } else {

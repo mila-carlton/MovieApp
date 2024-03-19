@@ -14,6 +14,7 @@ final class MovieCollectionViewCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        backgroundColor = .cellColor
         setupImage()
     }
     
@@ -21,27 +22,13 @@ final class MovieCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(movieItem: MovieListResult) {
-        movieImage.loadImage(imageURL: movieItem.posterPath ?? "")
+    func configure(item: MovieItemProtocol) {
+        movieImage.loadImage(imageURL: item.imagePath)
      }
-    func configure(movie: DiscoverResult) {
-        movieImage.loadImage(imageURL: movie.posterPath ?? "")
-    }
-    func configure(searchMovie: SearchResult) {
-        movieImage.loadImage(imageURL: searchMovie.posterPath ?? "")
-    }
-    func configure(casts: Cast) {
-        movieImage.loadImage(imageURL: casts.profilePath ?? "")
-    }
-    func configure(similar: MovieListResult) {
-        movieImage.loadImage(imageURL: similar.posterPath ?? "")
-    }
-    
-    func configure(filmography: FilmographyCast) {
-        movieImage.loadImage(imageURL: filmography.posterPath ?? "")
-    }
     
     private func setupImage() {
+        movieImage.layer.masksToBounds = true
+        movieImage.layer.cornerRadius = 8
         movieImage.contentMode = .scaleToFill
         addSubview(movieImage)
         movieImage.translatesAutoresizingMaskIntoConstraints = false

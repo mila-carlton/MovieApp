@@ -26,7 +26,5 @@ struct SoonMovie: Decodable {
         case posterPath = "poster_path"
         case releaseDate = "release_date"
         case voteAverage = "vote_average"
-        
-        
     }
 }

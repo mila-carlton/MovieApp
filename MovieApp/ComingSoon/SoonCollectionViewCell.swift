@@ -13,7 +13,7 @@ final class SoonCollectionViewCell: UICollectionViewCell {
     
     static let id = "\(SoonCollectionViewCell.self)"
     
-    lazy var starImage: UIImageView = {
+    private lazy var starImage: UIImageView = {
         let starImage = UIImageView()
         starImage.image = UIImage(systemName: "star.fill")
         starImage.tintColor = .yellow
@@ -22,14 +22,14 @@ final class SoonCollectionViewCell: UICollectionViewCell {
         return starImage
     }()
     
-    lazy var soonImage: UIImageView = {
+    private lazy var soonImage: UIImageView = {
         let image = UIImageView()
         image.contentMode = .scaleToFill
         addSubview(image)
         return image
     }()
     
-    lazy var nameLabel: UILabel = {
+    private lazy var nameLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 20, weight: .bold)
         label.numberOfLines = 0
@@ -37,14 +37,14 @@ final class SoonCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
-    lazy var dateLabel: UILabel = {
+    private lazy var dateLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 15, weight: .semibold)
         addSubview(label)
         return label
     }()
     
-    lazy var rangeLabel: UILabel = {
+    private lazy var rangeLabel: UILabel = {
         let label = UILabel()
         label.font = .boldSystemFont(ofSize: 15)
         addSubview(label)

@@ -62,7 +62,7 @@ final class StorageManager {
         }
     }
     
-    func deleteMovie(movieId: Double) {
+    func deleteMovie(movieId: Double, completion: @escaping (() ->Void)) {
         let fetchRequest: NSFetchRequest<MovieEntity> = MovieEntity.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "movidid == %lf", movieId)
         
@@ -70,10 +70,13 @@ final class StorageManager {
             if let movieToDelete = try context.fetch(fetchRequest).first {
                 context.delete(movieToDelete)
                 saveContext()
+                completion()
             } else {
+                completion()
                 print("Movie with ID \(movieId) not found.")
             }
         } catch {
+            completion()
             print("Error deleting movie: \(error)")
         }
     }

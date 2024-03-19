@@ -32,7 +32,7 @@ final class SearchViewController: UIViewController, UISearchBarDelegate, UISearc
         return collectionView
     }()
     
-  
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupSearchVC()
@@ -56,7 +56,7 @@ final class SearchViewController: UIViewController, UISearchBarDelegate, UISearc
             DispatchQueue.main.async {
                 self.searchCollectionView.reloadData()
             }
-        return }
+            return }
         viewModel.getSearchMovies(query: query) { [weak self] in
             guard let self = self else { return }
             DispatchQueue.main.async {
@@ -65,28 +65,28 @@ final class SearchViewController: UIViewController, UISearchBarDelegate, UISearc
         }
     }
 }
-    extension SearchViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-        
-        func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-            viewModel.movies.count
-        }
-        
-        func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MovieCollectionViewCell.id , for: indexPath) as? MovieCollectionViewCell else { return UICollectionViewCell() }
-            let movie = viewModel.movies[indexPath.item]
-            cell.configure(searchMovie: movie)
-            return cell
-        }
-        
-        func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-            
-            let detailsVM = DetailsViewModel(movieId: viewModel.movies[indexPath.item].id ?? 0)
-            
-            let detailsVc = DetailsViewController(viewModel: detailsVM)
-            
-            self.navigationController?.pushViewController(detailsVc, animated: true)
-        }
+extension SearchViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        viewModel.movies.count
     }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MovieCollectionViewCell.id , for: indexPath) as? MovieCollectionViewCell else { return UICollectionViewCell() }
+        let movie = viewModel.movies[indexPath.item]
+        cell.configure(item: movie)
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        let detailsVM = DetailsViewModel(movieId: viewModel.movies[indexPath.item].id ?? 0)
+        
+        let detailsVc = DetailsViewController(viewModel: detailsVM)
+        
+        self.navigationController?.pushViewController(detailsVc, animated: true)
+    }
+}
 
 extension SearchViewController {
     
@@ -98,5 +98,5 @@ extension SearchViewController {
             searchCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
-
+    
 }

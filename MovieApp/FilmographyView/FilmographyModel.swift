@@ -48,3 +48,9 @@ struct FilmographyCast: Codable {
         case order, department, job
     }
 }
+
+extension FilmographyCast: MovieItemProtocol {
+    var imagePath: String {
+        return posterPath ?? ""
+    }
+}

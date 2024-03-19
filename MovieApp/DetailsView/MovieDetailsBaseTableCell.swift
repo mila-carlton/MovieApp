@@ -263,7 +263,7 @@ extension MovieDetailsBaseTableCell: UICollectionViewDelegate, UICollectionViewD
             
         } else {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MovieCollectionViewCell.id, for: indexPath) as! MovieCollectionViewCell
-            cell.configure(movieItem: similarMovies[indexPath.item])
+            cell.configure(item: similarMovies[indexPath.item])
             return cell
         }
     }

@@ -32,7 +32,8 @@ final class FilmographyViewCell: UICollectionViewCell {
         filmImage.loadImage(imageURL: film.posterPath ?? "")
     }
     
-    func setupUI() {
+    private func setupUI() {
+        
         NSLayoutConstraint.activate([
             filmImage.topAnchor.constraint(equalTo: contentView.topAnchor),
             filmImage.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),

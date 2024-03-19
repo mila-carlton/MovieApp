@@ -23,12 +23,12 @@ final class ComingSoonViewModel {
             }
         }
     }
-        
+    
     func numberOfSoonMovies() -> Int {
         soonMovies.count
     }
     func cellForRowAt(at index: Int) -> SoonMovie {
         return soonMovies[index]
     }
-    }
+}
 

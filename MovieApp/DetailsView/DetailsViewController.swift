@@ -17,11 +17,12 @@ final class DetailsViewController: UIViewController {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.showsVerticalScrollIndicator = false
         tableView.allowsSelection = false
+        tableView.separatorStyle = .none
         view.addSubview(tableView)
         return tableView
     }()
     
-    var viewModel: DetailsViewModel
+    private var viewModel: DetailsViewModel
     
     init(viewModel: DetailsViewModel) {
         self.viewModel = viewModel
@@ -42,7 +43,7 @@ final class DetailsViewController: UIViewController {
         
     }
     
-    func getMovieDetails() {
+    private func getMovieDetails() {
         viewModel.fetchDetails {
             self.viewModel.fetchVideos {
                 self.viewModel.fetchCast {
@@ -50,7 +51,6 @@ final class DetailsViewController: UIViewController {
                         DispatchQueue.main.async {
                             self.baseTableView.reloadData()
                         }
-                        
                     }
                 }
         
@@ -73,9 +73,6 @@ final class DetailsViewController: UIViewController {
                 self.hideLoadingIndicator()
                 
             })
-            
-            
-            
         }
 
     }
@@ -128,14 +125,12 @@ extension DetailsViewController: UITableViewDelegate, UITableViewDataSource {
             guard let self = self else { return }
             let allVC = SeeAllCastsViewController(casts: self.viewModel.movieCastResults, movieName: viewModel.movieDetails?.title ?? "")
             navigationController?.pushViewController(allVC, animated: true)
-            
         }
         
         cell.seeAllSimilarButtonTapHandler = { [weak self] in
             guard let self = self else { return }
             let allVC = SeeAllSimilarViewController(similar: self.viewModel.similarMovies)
             navigationController?.pushViewController(allVC, animated: true)
-            
         }
         
         return cell
@@ -154,9 +149,8 @@ extension DetailsViewController: CastSelectableDelegate {
         let castVC = CastDetailsViewController(viewModel: castVM, movieName: viewModel.movieDetails?.title ?? "")
         self.navigationController?.pushViewController(castVC, animated: true)
     }
-    
-    
 }
+
 extension DetailsViewController: SimilarSelectableDelegate {
     
     func similarSelected(with id: Int) {
@@ -164,6 +158,4 @@ extension DetailsViewController: SimilarSelectableDelegate {
         let similarVC = DetailsViewController(viewModel: similarVM)
         self.navigationController?.pushViewController(similarVC, animated: true)
     }
-    
-    
 }

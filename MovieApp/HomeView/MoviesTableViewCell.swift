@@ -21,7 +21,7 @@ final class MoviesTableViewCell: UITableViewCell, UICollectionViewDelegate, UICo
     
     private let titleLabel = UILabel()
     
-    lazy var seeButton: UIButton = {
+    private lazy var seeButton: UIButton = {
         let button = UIButton()
         button.setTitle("See all", for: .normal)
         button.setTitleColor(.red, for: .normal)
@@ -31,7 +31,7 @@ final class MoviesTableViewCell: UITableViewCell, UICollectionViewDelegate, UICo
         return button
     }()
     
-    lazy var movieCollectionView: UICollectionView = {
+    private lazy var movieCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         layout.minimumLineSpacing = 8
@@ -41,12 +41,13 @@ final class MoviesTableViewCell: UITableViewCell, UICollectionViewDelegate, UICo
         collectionView.delegate = self
         collectionView.isScrollEnabled = true
         collectionView.showsHorizontalScrollIndicator = false
+        collectionView.backgroundColor = UIColor.background
         contentView.addSubview(collectionView)
         return collectionView
     }()
     
-    var movies: HomeMovies?
-    var movieArray: [MovieListResult] = []
+    private var movies: HomeMovies?
+    private var movieArray: [MovieListResult] = []
     
     var seeAllMovieesDelegate: AllMovieSeeDelegate?
     var selectedMovieDelegate: MovieSelectableDelegate?
@@ -54,7 +55,7 @@ final class MoviesTableViewCell: UITableViewCell, UICollectionViewDelegate, UICo
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        backgroundColor = .black
+        backgroundColor = .clear
         setupAutoLayouts()
     }
     
@@ -74,7 +75,7 @@ final class MoviesTableViewCell: UITableViewCell, UICollectionViewDelegate, UICo
             movieCollectionView.reloadData()
         }
     }
-    @objc func seeAllButtonTapped() {
+    @objc private func seeAllButtonTapped() {
         
         guard let seeAllMovieesDelegate = self.seeAllMovieesDelegate, let movies = self.movies else { return }
         seeAllMovieesDelegate.seeAllButtonTapped(movies: movies)
@@ -86,12 +87,15 @@ final class MoviesTableViewCell: UITableViewCell, UICollectionViewDelegate, UICo
             view.translatesAutoresizingMaskIntoConstraints = false
         }
         
+        titleLabel.textColor = .white
+        titleLabel.font = .systemFont(ofSize: 16, weight: .semibold)
+        
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 16),
             titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
             titleLabel.heightAnchor.constraint(equalToConstant: 18),
             
-            seeButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
+            seeButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
             seeButton.heightAnchor.constraint(equalToConstant: 14),
             seeButton.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor),
             
@@ -114,9 +118,7 @@ extension MoviesTableViewCell {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MovieCollectionViewCell.id, for: indexPath) as! MovieCollectionViewCell
-        cell.configure(movieItem: movieArray[indexPath.item])
-        cell.backgroundColor = .cellColor
-        cell.layer.cornerRadius = 15
+        cell.configure(item: movieArray[indexPath.item])
         return cell
         
     }

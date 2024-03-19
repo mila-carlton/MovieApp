@@ -9,8 +9,6 @@ import UIKit
 
 final class SeeAllCastsViewController: UIViewController {
     
-    var casts: [Cast] = []
-    
     private lazy var allCastsCollectionView: UICollectionView = {
         
         let layout = UICollectionViewFlowLayout()
@@ -31,7 +29,8 @@ final class SeeAllCastsViewController: UIViewController {
         return collectionView
     }()
     
-    var movieName: String
+    private var casts: [Cast] = []
+    private var movieName: String
     
     init(casts: [Cast], movieName: String) {
         self.casts = casts
@@ -49,8 +48,8 @@ final class SeeAllCastsViewController: UIViewController {
         setupLayouts()
         
     }
-    func setupLayouts() {
-                
+    private func setupLayouts() {
+        
         NSLayoutConstraint.activate([
             allCastsCollectionView.topAnchor.constraint(equalTo: view.topAnchor),
             allCastsCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -58,7 +57,7 @@ final class SeeAllCastsViewController: UIViewController {
             allCastsCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
-
+    
 }
 
 extension SeeAllCastsViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
@@ -69,7 +68,7 @@ extension SeeAllCastsViewController: UICollectionViewDelegate, UICollectionViewD
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MovieCollectionViewCell.id, for: indexPath) as! MovieCollectionViewCell
-        cell.configure(casts: casts[indexPath.item])
+        cell.configure(item: casts[indexPath.item])
         return cell
     }
     

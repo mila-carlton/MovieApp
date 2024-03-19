@@ -11,7 +11,7 @@ final class ComingSoonViewController: UIViewController {
     
     private var viewModel = ComingSoonViewModel()
     
-    lazy var comingSoonCollectionView: UICollectionView = {
+    private lazy var comingSoonCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         layout.minimumLineSpacing = 10

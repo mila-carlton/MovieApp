@@ -10,7 +10,7 @@ import UIKit
 final class HomeViewController: UIViewController {
     
     
-    lazy var movieTableView: UITableView = {
+    private lazy var movieTableView: UITableView = {
         
         let tableView = UITableView()//
         tableView.rowHeight = 270
@@ -18,16 +18,17 @@ final class HomeViewController: UIViewController {
         
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.backgroundColor = .black
+        tableView.backgroundColor = .clear
         view.addSubview(tableView)
         tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.showsVerticalScrollIndicator = false
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -8),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 8),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -8)
         ])
-        
+        tableView.separatorStyle = .none
         return tableView
     }()
     
@@ -71,6 +72,7 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
         cell.seeAllMovieesDelegate = self
         return cell
     }
+    
 }
 
 extension HomeViewController: AllMovieSeeDelegate {

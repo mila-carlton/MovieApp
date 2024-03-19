@@ -8,8 +8,6 @@
 import UIKit
 
 final class SeeAllFilmographyViewController: UIViewController {
-
-    var filmography: [FilmographyCast] = []
     
     private lazy var allFilmographyCollectionView: UICollectionView = {
         
@@ -31,6 +29,8 @@ final class SeeAllFilmographyViewController: UIViewController {
         return collectionView
     }()
     
+    private var filmography: [FilmographyCast] = []
+    
     init(filmography: [FilmographyCast]) {
         self.filmography = filmography
         super.init(nibName: nil, bundle: nil)
@@ -45,7 +45,7 @@ final class SeeAllFilmographyViewController: UIViewController {
         setupLayouts()
     }
     
-    func setupLayouts() {
+    private func setupLayouts() {
                 
         NSLayoutConstraint.activate([
             allFilmographyCollectionView.topAnchor.constraint(equalTo: view.topAnchor),
@@ -65,7 +65,7 @@ extension SeeAllFilmographyViewController: UICollectionViewDelegate, UICollectio
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MovieCollectionViewCell.id, for: indexPath) as! MovieCollectionViewCell
-        cell.configure(filmography: filmography[indexPath.item])
+        cell.configure(item: filmography[indexPath.item])
         return cell
     }
     

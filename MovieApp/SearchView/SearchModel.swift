@@ -47,3 +47,9 @@ struct SearchResult: Codable {
     }
 }
 
+
+extension SearchResult: MovieItemProtocol {
+    var imagePath: String {
+        return posterPath ?? ""
+    }
+}

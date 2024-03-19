@@ -36,3 +36,10 @@ struct Cast: Codable {
         case order, department, job
     }
 }
+
+
+extension Cast: MovieItemProtocol {
+    var imagePath: String {
+        return profilePath ?? ""
+    }
+}

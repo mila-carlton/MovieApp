@@ -17,6 +17,7 @@ final class CastDetailsViewController: UIViewController {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.showsVerticalScrollIndicator = false
         tableView.allowsSelection = false
+        tableView.separatorStyle = .none
         view.addSubview(tableView)
         return tableView
     }()

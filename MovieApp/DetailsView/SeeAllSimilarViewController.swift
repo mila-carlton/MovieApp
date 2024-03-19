@@ -9,8 +9,6 @@ import UIKit
 
 final class SeeAllSimilarViewController: UIViewController {
     
-    var similar: [MovieListResult] = []
-    
     private lazy var allSimilarCollectionView: UICollectionView = {
         
         let layout = UICollectionViewFlowLayout()
@@ -31,6 +29,8 @@ final class SeeAllSimilarViewController: UIViewController {
         return collectionView
     }()
     
+    private var similar: [MovieListResult] = []
+    
     init(similar: [MovieListResult]) {
         self.similar = similar
         super.init(nibName: nil, bundle: nil)
@@ -46,7 +46,7 @@ final class SeeAllSimilarViewController: UIViewController {
         
     }
     
-    func setupLayouts() {
+    private func setupLayouts() {
                 
         NSLayoutConstraint.activate([
             allSimilarCollectionView.topAnchor.constraint(equalTo: view.topAnchor),
@@ -67,12 +67,11 @@ extension SeeAllSimilarViewController: UICollectionViewDelegate, UICollectionVie
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MovieCollectionViewCell.id, for: indexPath) as! MovieCollectionViewCell
         
-        cell.configure(similar: similar[indexPath.item])
+        cell.configure(item: similar[indexPath.item])
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
         let detailsVM = DetailsViewModel(movieId: similar[indexPath.item].id ?? 0)
         
         let detailsVc = DetailsViewController(viewModel: detailsVM)

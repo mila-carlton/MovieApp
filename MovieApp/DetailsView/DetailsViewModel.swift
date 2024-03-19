@@ -8,7 +8,7 @@
 import Foundation
 
 final class DetailsViewModel {
-   
+    
     private var movieId: Int!
     
     private(set) var movieDetails: MovieDetailsModel?
@@ -53,7 +53,7 @@ final class DetailsViewModel {
     func fetchSimilar(completion: @escaping(() -> Void)) {
         webService.fetchSimilar(id: movieId) { [weak self] similar in
             guard let self = self, let allSimilar = similar else { completion()
-            return }
+                return }
             self.similarMovies = allSimilar
             completion()
         }
@@ -70,12 +70,12 @@ final class DetailsViewModel {
         
         DispatchQueue.global(qos: .background).async {
             NetworkRequest.shared.downloadYouTubeVideo(from: videoURL, saveTo: saveURL) { error in
-             
-                    StorageManager.shared.insertMovie(movie: SavedMovieModel(title: movieTitle, filePath: saveURL.absoluteString, movieId: Double(self.movieId ?? 0))) {
-                        completion()
-                    }
-                            }
-
+                
+                StorageManager.shared.insertMovie(movie: SavedMovieModel(title: movieTitle, filePath: saveURL.absoluteString, movieId: Double(self.movieId ?? 0))) {
+                    completion()
+                }
+            }
+            
         }
         
     }
@@ -85,69 +85,13 @@ final class DetailsViewModel {
 
 class DownloadViewModel: NSObject, URLSessionDownloadDelegate {
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
-            
-        }
         
-        func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
-           
-        }
+    }
+    
+    func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
+        
+    }
     
     var progress: Float = 0
     
-    
-    
-    
-    /*
-    
-    
-    func downloadTrailer(item: VideoResult, cancelDownload: Bool, complete: @escaping(String?, Double?)->()) {
-            if cancelDownload == true {
-                mainQueue.cancelAllOperations()
-                complete(nil, 0)
-            } else {
-                mainQueue.addOperation {
-                    
-                    WebService.shared.downloadVideo(urlString: "https://youtu.be/zAGVQLHvwOY") { [unowned self] progress, url in
-                        
-                        if progress == 1, let url = url, cancelDownload == false {
-                            CoreDataHelper.shared.insertDownloadTrailersData(movieName: movieName, trailerName:  item.name ?? "trailer x", trailerPath: "\(url)")
-                            complete(nil, progress)
-                        } else if progress < 1, cancelDownload == false {
-                            complete(nil, progress)
-                        } else if progress == 0 {
-                            complete(nil, progress)
-                        } else {
-                            complete("Error", 0)
-                        }
-                    }
-                }
-            }
-        }
-    
-    
-    func downloadVideo(urlString: String, completion: @escaping(Double, URL?)->()) {
-            
-            let url = URL(string: "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4")
-            //let url = URL(string: "https://www.youtube.com/watch?v=VS_ub1QaIYQ")
-            
-            let request = AF.request(url!).downloadProgress(closure: {
-                (progress) in
-                let pro = progress.fractionCompleted
-                completion(pro, nil)
-            })
-            
-            request.responseData { response in
-                if let data = response.data {
-                    let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-                    let videoURL = documentsURL.appendingPathComponent("video.mp4")
-                    do {
-                        try data.write(to: videoURL, options: .fileProtectionMask)
-                        completion(1, videoURL)
-                    } catch {
-                        print("Something went wrong!")
-                    }
-                }
-            }
-        }
-    */
 }

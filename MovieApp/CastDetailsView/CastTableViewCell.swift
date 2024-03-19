@@ -17,7 +17,7 @@ final class CastTableViewCell: UITableViewCell {
     
     private lazy var castImage: UIImageView = {
         let imageView = UIImageView()
-        imageView.contentMode = .scaleToFill
+        imageView.contentMode = .scaleAspectFit
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
@@ -162,6 +162,7 @@ final class CastTableViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         backgroundColor = .clear
+        selectionStyle = .none
         addViews()
     }
     
@@ -229,8 +230,8 @@ final class CastTableViewCell: UITableViewCell {
         NSLayoutConstraint.activate([
             
             castImage.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor),
-            castImage.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 40),
-            castImage.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -40),
+            castImage.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            castImage.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             castImage.heightAnchor.constraint(equalToConstant: 290),
             
           

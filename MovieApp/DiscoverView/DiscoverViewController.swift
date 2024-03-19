@@ -85,10 +85,9 @@ extension DiscoverViewController: UICollectionViewDelegate, UICollectionViewData
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let movieVC = MovieForGenreViewController()
-        let selectedGenreId = viewModel.genre(at: indexPath.item).id ?? 0
-        movieVC.viewModelForGenre = MovieForGenresViewModel(id: selectedGenreId)
-        navigationController?.pushViewController(movieVC, animated: true)
+        let genreVM = MovieForGenresViewModel(id: viewModel.genre(at: indexPath.item).id ?? 0)
+        let genreMoviesVC = MovieForGenreViewController(viewModelForGenre: genreVM, navigationTitle: viewModel.genre(at: indexPath.item).name ?? "")
+        navigationController?.pushViewController(genreMoviesVC, animated: true)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {

@@ -54,7 +54,7 @@ extension SeeAllViewController: UICollectionViewDelegate, UICollectionViewDataSo
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MovieCollectionViewCell.id, for: indexPath) as! MovieCollectionViewCell
-        cell.configure(movieItem: movies[indexPath.item])
+        cell.configure(item: movies[indexPath.item])
         return cell
     }
     

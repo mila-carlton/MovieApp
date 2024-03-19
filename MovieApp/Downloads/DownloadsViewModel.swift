@@ -25,7 +25,11 @@ final class DownloadsViewModel {
         }
     }
     
-    func deleteMovie() {}
+    func deleteMovie(movieId: Double, completion: @escaping (() ->Void)) {
+        StorageManager.shared.deleteMovie(movieId: movieId) {
+            completion()
+        }
+    }
     
     
 }

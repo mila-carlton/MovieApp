@@ -11,25 +11,24 @@ import AVFoundation
 
 final class DownloadsViewController: UIViewController {
     
-    private lazy var savedMovieCollectionView: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .vertical
-        layout.itemSize = CGSize(width: UIScreen.main.bounds.width * 0.92, height: 44)
-        layout.minimumLineSpacing = 10
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.dataSource = self
-        collectionView.delegate = self
-        collectionView.register(SavedMovieCollectionViewCell.self, forCellWithReuseIdentifier: SavedMovieCollectionViewCell.id)
-        collectionView.backgroundColor = .customBackgroundColor
-        view.addSubview(collectionView)
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
-        return collectionView
+    private lazy var savedMovieCollectionView: UITableView = {
+        let tableView = UITableView(frame: .zero)
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.register(SavedMovieTableViewCell.self, forCellReuseIdentifier: SavedMovieTableViewCell.id)
+        
+        tableView.backgroundColor = .customBackgroundColor
+        tableView.separatorStyle = .none
+        tableView.rowHeight = 54
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(tableView)
+        return tableView
     }()
     
-    let viewModel = DownloadsViewModel()
+    private let viewModel = DownloadsViewModel()
     
-    var player = AVPlayer()
-    var playerController = AVPlayerViewController()
+    private var player = AVPlayer()
+    private var playerController = AVPlayerViewController()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,7 +41,7 @@ final class DownloadsViewController: UIViewController {
         fetchMovies()
     }
     
-    func fetchMovies() {
+    private func fetchMovies() {
         viewModel.getDownloadedMovies {
             DispatchQueue.main.async {
                 self.savedMovieCollectionView.reloadData()
@@ -51,8 +50,9 @@ final class DownloadsViewController: UIViewController {
     }
     
     
-    func autoLayout() {
+    private func autoLayout() {
         NSLayoutConstraint.activate([
+            
             savedMovieCollectionView.topAnchor.constraint(equalTo: view.topAnchor),
             savedMovieCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             savedMovieCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -61,21 +61,32 @@ final class DownloadsViewController: UIViewController {
     }
 }
 
-extension DownloadsViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+extension DownloadsViewController: UITableViewDataSource,UITableViewDelegate {
     
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         viewModel.savedMovies.count
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SavedMovieCollectionViewCell.id, for: indexPath) as! SavedMovieCollectionViewCell
-        cell.configure(movieName: viewModel.savedMovies[indexPath.item])
-        
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: SavedMovieTableViewCell.id, for: indexPath) as! SavedMovieTableViewCell
+        cell.configure(movieName: viewModel.savedMovies[indexPath.row])
         return cell
     }
     
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        showVideo(index: indexPath.item)
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        showVideo(index: indexPath.row)
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            print("Deleted")
+            self.viewModel.savedMovies.remove(at: indexPath.row)
+            self.viewModel.deleteMovie(movieId: viewModel.savedMovies[indexPath.row].movieId) {
+                tableView.beginUpdates()
+                tableView.deleteRows(at: [indexPath], with: .automatic)
+                tableView.endUpdates()
+            }
+        }
     }
     
     func showVideo(index: Int) {
